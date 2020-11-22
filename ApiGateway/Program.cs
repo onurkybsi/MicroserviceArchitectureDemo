@@ -34,10 +34,6 @@ namespace ApiGateway
                 .AddEnvironmentVariables()
                 .Build();
 
-        // {
-        //      "Name": "Seq",
-        //      "Args": { "serverUrl": "http://192.168.99.105:3000" }
-        // }
         private static Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
             => new LoggerConfiguration()
                 .ReadFrom.Configuration(configuration)

@@ -1,0 +1,23 @@
+version: "3"
+services:
+  app-user-mssql:
+    image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "App_user_mssql_pass123!"
+      MSSQL_PID: Express
+    ports:
+      - "1433:1433"
+  seq-logs:
+    image: datalust/seq:latest
+    environment:
+      ACCEPT_EULA: "Y"
+    ports:
+      - "5341:80"
+  apigateway:
+    build: ./ApiGateway
+    ports:
+      - "5000:5000"
+    depends_on:
+      - app-user-mssql
+      - seq-logs

@@ -60,7 +60,6 @@ namespace ApiGateway.Controllers
         public IActionResult GetAllUsers()
             => Ok(_repo.GetListByFilter(null));
 
-
         [HttpGet]
         public async Task<IActionResult> GetCurrentUser()
         {

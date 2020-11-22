@@ -23,7 +23,7 @@ namespace ApiGateway
         public void ConfigureServices(IServiceCollection services)
         {
             InitializeDb();
-
+            
             services.AddDbContext<AppUserDbContext>(options => options.UseSqlServer(Configuration["AppUserDbConnection"]));
 
             services.AddScoped<IAppUserRepo, AppUserRepo>();
