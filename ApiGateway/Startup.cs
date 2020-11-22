@@ -28,7 +28,7 @@ namespace ApiGateway
 
             services.AddScoped<IAppUserRepo, AppUserRepo>();
 
-            SetConfigurues(services);
+            SetConfigures(services);
 
             services.AddJwtAuth(new JWTAuthConfig
             {
@@ -86,7 +86,7 @@ namespace ApiGateway
             }
         }
 
-        private void SetConfigurues(IServiceCollection services)
+        private void SetConfigures(IServiceCollection services)
         {
             services.Configure<JWTAuthConfig>(Configuration.GetSection("JWTAuthConfig"));
         }
