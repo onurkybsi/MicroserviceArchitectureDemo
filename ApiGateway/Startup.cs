@@ -39,7 +39,8 @@ namespace ApiGateway
 
             services.AddScoped<IAuthService, AuthService>();
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddNewtonsoftJson();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
