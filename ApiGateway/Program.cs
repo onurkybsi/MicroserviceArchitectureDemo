@@ -1,6 +1,12 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
+using ApiGateway.Data.Entity.AppUser;
+using ApiGateway.Infrastructure;
+using ApiGateway.Services.Auth;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -15,8 +21,11 @@ namespace ApiGateway
 
             Log.Logger = CreateSerilogLogger(configuration);
 
-            Log.Information("ApiGateway listening...");
-            CreateHostBuilder(args, configuration).Build().Run();
+            var host = CreateHostBuilder(args, configuration).Build();
+
+            SeedAppUserDb(host, GetAdminUser(configuration));
+
+            host.Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args, IConfiguration configuration) =>
@@ -27,6 +36,7 @@ namespace ApiGateway
                     webBuilder.UseKestrel();
                     webBuilder.UseStartup<Startup>();
                 }).ConfigureLogging(config => config.ClearProviders()).UseSerilog();
+
         private static IConfiguration GetConfiguration()
             => new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -38,5 +48,29 @@ namespace ApiGateway
             => new LoggerConfiguration()
                 .ReadFrom.Configuration(configuration)
                 .CreateLogger();
+
+        private static void SeedAppUserDb(IHost host, AppUser admin)
+        {
+            using (var scope = host.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+
+                try
+                {
+                    Initializer.SeedData<AppUserDbContext, AppUser>(services, new List<AppUser> { admin });
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "An error occurred seeding the AppUserDb.");
+                }
+            }
+        }
+
+        private static AppUser GetAdminUser(IConfiguration configuration)
+            => new AppUser
+            {
+                Email = configuration["APP_ADMIN_USER"],
+                HashedPassword = EncryptionHelper.CreateHashed(configuration["APP_ADMIN_PASSWORD"])
+            };
     }
 }
