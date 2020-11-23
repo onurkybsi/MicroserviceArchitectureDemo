@@ -22,7 +22,8 @@ namespace ApiGateway.Services.Auth
             _authConfig = authConfig.Value;
         }
 
-        public AuthResult Authenticate(LoginModel login)
+        // TO-DO: Bu metot EncryptionHelper a bağımlı durumda şuan saltPointer üzerinden. Bunu düşün.
+        public AuthResult Authenticate(ILoginModel login)
         {
             var user = _repo.GetByFilter(u => u.Email == login.Email);
             if (user is null)
