@@ -27,8 +27,6 @@ Project_Readme.html
 *.userosscache
 *.sln.docstates
 .vscode/
-!.vscode/extensions.json
-!.vscode/settings.json
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 

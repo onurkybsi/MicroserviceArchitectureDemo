@@ -23,11 +23,11 @@ namespace ApiGateway.Services.Auth
                                      iterationCount: 10000,
                                      numBytesRequested: 256 / 8);
 
-            return System.Convert.ToBase64String(valueBytes) + SaltPointer + salt;
+            return $"{System.Convert.ToBase64String(valueBytes)}{SaltPointer}{salt}";
         }
 
-        public static bool VerifyHashed(string value, string salt, string hash)
-            => CreateHashed(value, salt).Split(SaltPointer)[0] == hash;
+        public static bool VerifyHashed(string value, string salt, string hashed)
+            => CreateHashed(value, salt).Split(SaltPointer)[0] == hashed;
 
         private static string CreateSalt()
         {

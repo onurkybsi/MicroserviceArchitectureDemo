@@ -49,6 +49,8 @@ namespace ApiGateway
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            Log.Information($"ApiGateway on: {env.EnvironmentName}, Connection string: {Configuration["APPUSERDB_CONNECTION_STRING"]}");
+
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
             else if (env.IsProduction())

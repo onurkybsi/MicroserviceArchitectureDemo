@@ -1,27 +1,22 @@
-version: "3"
+version: "3.4"
 services:
-  app-user-db:
-    image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+  db:
+    image: "mcr.microsoft.com/mssql/server:2017-latest"
     environment:
-      ACCEPT_EULA: "Y"
-      SA_PASSWORD: "App_user_mssql_pass123!"
-      MSSQL_PID: Express
-    ports: 
-      - "1433:1433"
-  seq-logs:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=1Secure*Password1
+  seq-log:
     image: datalust/seq:latest
     environment:
-      ACCEPT_EULA: "Y"
+      - ACCEPT_EULA=Y
     ports:
       - "5341:5341"
   apigateway:
     build: ./ApiGateway
     ports:
-      - "5000:80"
-    environment:
-      - APPUSERDB_CONNECTION_STRING: "Server=app-user-name;Database=AppUserDb;Trusted_Connection=true",
-      - APP_ADMIN_USER: "onurbpm@oulook.com",
-      - APP_ADMIN_PASSWORD: "testparola123"
+      - "5000:5000"
+    env_file:
+      - ./ApiGateway/dev-docker.env
     depends_on:
-      - app-user-db
-      - seq-logs
+      - db
+      - seq-log
