@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 
-namespace ApiGateway.Data.AppUser
+namespace ApiGateway.Data.Entity.AppUser
 {
     public class AppUserRepo : IAppUserRepo
     {

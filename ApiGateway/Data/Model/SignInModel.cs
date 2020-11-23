@@ -1,12 +1,14 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ApiGateway.Data.Entity
+namespace ApiGateway.Data.Model
 {
-    public class LoginModel
+    public class SignInModel
     {
         [Required]
         public string Email { get; set; }
         [Required]
         public string Password { get; set; }
+        [Required]
+        public string Role { get; set; }
     }
 }

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace ApiGateway.Data.AppUser
+namespace ApiGateway.Data.Entity.AppUser
 {
     public interface IAppUserRepo
     {

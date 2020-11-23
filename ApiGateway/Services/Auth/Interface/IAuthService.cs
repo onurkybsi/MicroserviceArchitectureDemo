@@ -1,5 +1,4 @@
-using ApiGateway.Data.AppUser;
-using ApiGateway.Data.Entity;
+using ApiGateway.Data.Model;
 
 namespace ApiGateway.Services.Auth
 {

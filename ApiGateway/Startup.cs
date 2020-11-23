@@ -1,5 +1,5 @@
-using ApiGateway.Data.AppUser;
-using ApiGateway.Data.Entity;
+using ApiGateway.Data.Entity.AppUser;
+using ApiGateway.Data.Model;
 using ApiGateway.Infrastructure;
 using ApiGateway.Services.Auth;
 using Microsoft.AspNetCore.Builder;
@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace ApiGateway
 {
@@ -22,19 +23,19 @@ namespace ApiGateway
 
         public void ConfigureServices(IServiceCollection services)
         {
-            InitializeDb();
-            
-            services.AddDbContext<AppUserDbContext>(options => options.UseSqlServer(Configuration["AppUserDbConnection"]));
+            Log.Information("ApiGateway listening...");
+
+            services.AddDbContext<AppUserDbContext>(options => options.UseSqlServer(Configuration["APPUSERDB_CONNECTION_STRING"]));
 
             services.AddScoped<IAppUserRepo, AppUserRepo>();
 
-            SetConfigures(services);
+            MapConfigurations(services);
 
-            services.AddJwtAuth(new JWTAuthConfig
+            services.AddJwtAuth(new AuthConfig
             {
-                Issuer = Configuration["JWTAuthConfig:Issuer"],
-                Audience = Configuration["JWTAuthConfig:Audience"],
-                SecurityKey = Configuration["JWTAuthConfig:SecurityKey"]
+                Issuer = Configuration["AuthConfig:Issuer"],
+                Audience = Configuration["AuthConfig:Audience"],
+                SecurityKey = Configuration["AuthConfig:SecurityKey"]
             });
 
             services.AddScoped<IAuthService, AuthService>();
@@ -49,8 +50,6 @@ namespace ApiGateway
                 app.UseDeveloperExceptionPage();
             else if (env.IsProduction())
                 app.UseHttpsRedirection();
-
-
 
             app.UseRouting();
             app.UseCors(c => c
@@ -67,29 +66,9 @@ namespace ApiGateway
             });
         }
 
-        private static void InitializeDb()
+        private void MapConfigurations(IServiceCollection services)
         {
-            using (var context = new AppUserDbContext())
-            {
-                if (context.Database.EnsureCreated())
-                {
-                    var admin = new AppUser
-                    {
-                        Email = "onurbpm@outlook.com",
-                        HashedPassword = EncryptionHelper.CreateHash("testparola123"),
-                        Role = Role.User
-                    };
-
-                    context.AppUsers.Add(admin);
-
-                    context.SaveChanges();
-                }
-            }
-        }
-
-        private void SetConfigures(IServiceCollection services)
-        {
-            services.Configure<JWTAuthConfig>(Configuration.GetSection("JWTAuthConfig"));
+            services.Configure<AuthConfig>(Configuration.GetSection("AuthConfig"));
         }
     }
 }

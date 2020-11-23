@@ -4,30 +4,35 @@ using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using ApiGateway.Data.Entity;
-using ApiGateway.Data.AppUser;
-using ApiGateway.Infrastructure;
+using ApiGateway.Data.Entity.AppUser;
+using ApiGateway.Data.Model;
 
 namespace ApiGateway.Services.Auth
 {
     public class AuthService : IAuthService
     {
-        private readonly JWTAuthConfig _tokenConfig;
+        private const string SaltPointer = "SaltPointer";
+
+        private readonly AuthConfig _authConfig;
         private readonly IAppUserRepo _repo;
 
-        public AuthService(IOptions<JWTAuthConfig> tokenConfig, IAppUserRepo repo)
+        public AuthService(IOptions<AuthConfig> authConfig, IAppUserRepo repo)
         {
             _repo = repo;
-            _tokenConfig = tokenConfig.Value;
+            _authConfig = authConfig.Value;
         }
 
         public AuthResult Authenticate(LoginModel login)
         {
             var user = _repo.GetByFilter(u => u.Email == login.Email);
-            if (user is null) return null;
+            if (user is null)
+                return new AuthResult
+                {
+                    IsSuccess = false
+                };
 
-            string userHash = user.HashedPassword.Split("saltis")[0];
-            string userSalt = user.HashedPassword.Split("saltis")[1];
+            string userHash = user.HashedPassword.Split(SaltPointer)[0];
+            string userSalt = user.HashedPassword.Split(SaltPointer)[1];
             if (!EncryptionHelper.ValidateHash(login.Password, userSalt, userHash))
             {
                 return new AuthResult
@@ -35,7 +40,6 @@ namespace ApiGateway.Services.Auth
                     IsSuccess = false
                 };
             }
-
 
             string createdToken = CreateToken(user);
 
@@ -53,7 +57,7 @@ namespace ApiGateway.Services.Auth
         {
             var tokenHandler = new JwtSecurityTokenHandler();
 
-            var secretKey = Encoding.ASCII.GetBytes(_tokenConfig.SecurityKey);
+            var secretKey = Encoding.ASCII.GetBytes(_authConfig.SecurityKey);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -64,9 +68,9 @@ namespace ApiGateway.Services.Auth
                     new Claim(ClaimTypes.Role, user.Role)
                 }),
 
-                Audience = _tokenConfig.Audience,
-                Issuer = _tokenConfig.Issuer,
-                Expires = DateTime.UtcNow.AddMinutes(0.5),
+                Audience = _authConfig.Audience,
+                Issuer = _authConfig.Issuer,
+                Expires = DateTime.UtcNow.AddMinutes(2),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKey), SecurityAlgorithms.HmacSha256Signature)
             };
 

@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using ApiGateway.Data.Model;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -8,7 +9,7 @@ namespace ApiGateway.Infrastructure
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddJwtAuth(this IServiceCollection services, JWTAuthConfig jWTAuthConfig)
+        public static IServiceCollection AddJwtAuth(this IServiceCollection services, AuthConfig jWTAuthConfig)
         {
             services.AddAuthentication(x =>
                 {

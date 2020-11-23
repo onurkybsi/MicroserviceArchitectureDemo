@@ -5,7 +5,16 @@ namespace ApiGateway.Services.Auth
 {
     public static class EncryptionHelper
     {
-        public static string CreateHash(string value, string salt)
+        private static string SaltPointer = "SaltPointer";
+
+        public static string CreateHashed(string value)
+        {
+            string salt = CreateSalt();
+
+            return CreateHashed(value, salt);
+        }
+
+        private static string CreateHashed(string value, string salt)
         {
             var valueBytes = KeyDerivation.Pbkdf2(
                                      password: value,
@@ -14,18 +23,11 @@ namespace ApiGateway.Services.Auth
                                      iterationCount: 10000,
                                      numBytesRequested: 256 / 8);
 
-            return System.Convert.ToBase64String(valueBytes) + "saltis" + salt;
-        }
-
-        public static string CreateHash(string value)
-        {
-            string salt = CreateSalt();
-
-            return CreateHash(value, salt);
+            return System.Convert.ToBase64String(valueBytes) + SaltPointer + salt;
         }
 
         public static bool ValidateHash(string value, string salt, string hash)
-            => CreateHash(value, salt).Split("saltis")[0] == hash;
+            => CreateHashed(value, salt).Split(SaltPointer)[0] == hash;
 
         private static string CreateSalt()
         {

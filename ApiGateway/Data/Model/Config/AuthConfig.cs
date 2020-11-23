@@ -1,6 +1,6 @@
-namespace ApiGateway.Infrastructure
+namespace ApiGateway.Data.Model
 {
-    public class JWTAuthConfig
+    public class AuthConfig
     {
         public string SecurityKey { get; set; }
         public string Issuer { get; set; }

@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
-using ApiGateway.Data.AppUser;
-using ApiGateway.Data.Entity;
+using ApiGateway.Data.Entity.AppUser;
+using ApiGateway.Data.Model;
 using ApiGateway.Services.Auth;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -41,7 +41,7 @@ namespace ApiGateway.Controllers
         [HttpPost]
         public IActionResult SignIn([FromBody] SignInModel newUser)
         {
-            string hashedPass = EncryptionHelper.CreateHash(newUser.Password);
+            string hashedPass = EncryptionHelper.CreateHashed(newUser.Password);
 
             var addedUser = new AppUser
             {
