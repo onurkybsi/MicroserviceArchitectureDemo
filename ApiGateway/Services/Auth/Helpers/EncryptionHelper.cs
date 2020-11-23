@@ -5,7 +5,7 @@ namespace ApiGateway.Services.Auth
 {
     public static class EncryptionHelper
     {
-        private static string SaltPointer = "SaltPointer";
+        private static string SaltPointer = Startup.StaticConfiguration["SaltPointer"];
 
         public static string CreateHashed(string value)
         {

@@ -16,9 +16,12 @@ namespace ApiGateway
     {
         public IConfiguration Configuration { get; }
 
+        public static IConfiguration StaticConfiguration { get; private set; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            StaticConfiguration = configuration;
         }
 
         public void ConfigureServices(IServiceCollection services)

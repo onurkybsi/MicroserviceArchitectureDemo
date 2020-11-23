@@ -11,7 +11,7 @@ namespace ApiGateway.Services.Auth
 {
     public class AuthService : IAuthService
     {
-        private const string SaltPointer = "SaltPointer";
+        private static string SaltPointer = Startup.StaticConfiguration["SaltPointer"];
 
         private readonly AuthConfig _authConfig;
         private readonly IAppUserRepo _repo;
