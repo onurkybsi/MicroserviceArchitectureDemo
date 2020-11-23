@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using ApiGateway.Data.Entity.AppUser;
 using ApiGateway.Data.Model;
@@ -37,7 +39,7 @@ namespace ApiGateway.Controllers
                 return BadRequest();
         }
 
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult SignIn([FromBody] SignInModel newUser)
         {
@@ -55,17 +57,12 @@ namespace ApiGateway.Controllers
             return Ok(_repo.GetByFilter(u => u.Email == newUser.Email));
         }
 
-        [Authorize(Roles = "User")]
         [HttpGet]
-        public IActionResult GetAllUsers()
-            => Ok(_repo.GetListByFilter(null));
-
-        [HttpGet]
-        public async Task<IActionResult> GetCurrentUser()
+        public IActionResult GetCurrentUser()
         {
-            string currentUserToken = await HttpContext.GetTokenAsync("access_token");
+            int currentUserId = Convert.ToInt32(HttpContext.User.Claims.FirstOrDefault(cu => cu.Type == "userId")?.Value);
 
-            var currentUser = _repo.GetByFilter(u => u.Token == currentUserToken);
+            AppUser currentUser = _repo.GetByFilter(cu => cu.Id == currentUserId);
 
             return Ok(currentUser);
         }

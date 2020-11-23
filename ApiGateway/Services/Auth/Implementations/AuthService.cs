@@ -33,7 +33,7 @@ namespace ApiGateway.Services.Auth
 
             string userHash = user.HashedPassword.Split(SaltPointer)[0];
             string userSalt = user.HashedPassword.Split(SaltPointer)[1];
-            if (!EncryptionHelper.ValidateHash(login.Password, userSalt, userHash))
+            if (!EncryptionHelper.VerifyHashed(login.Password, userSalt, userHash))
             {
                 return new AuthResult
                 {

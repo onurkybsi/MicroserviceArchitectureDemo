@@ -26,7 +26,7 @@ namespace ApiGateway.Services.Auth
             return System.Convert.ToBase64String(valueBytes) + SaltPointer + salt;
         }
 
-        public static bool ValidateHash(string value, string salt, string hash)
+        public static bool VerifyHashed(string value, string salt, string hash)
             => CreateHashed(value, salt).Split(SaltPointer)[0] == hash;
 
         private static string CreateSalt()
