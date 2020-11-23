@@ -1,3 +1,4 @@
+using System;
 using ApiGateway.Data.Model;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,6 +30,10 @@ namespace ApiGateway.Data.Entity.AppUser
             builder.Entity<AppUser>()
                 .Property(c => c.Role)
                 .HasDefaultValue(Role.User);
+
+            builder.Entity<AppUser>()
+                .Property(c => c.SystemEntryDate)
+                .HasDefaultValue(DateTime.Now);
         }
     }
 }

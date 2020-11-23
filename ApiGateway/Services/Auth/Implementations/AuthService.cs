@@ -64,7 +64,7 @@ namespace ApiGateway.Services.Auth
                 Subject = new ClaimsIdentity(new[]
                 {
                     new Claim("userId", user.Id.ToString()),
-                    new Claim(ClaimTypes.Email,user.Email),
+                    new Claim(ClaimTypes.Email, user.Email),
                     new Claim(ClaimTypes.Role, user.Role)
                 }),
 

@@ -25,6 +25,8 @@ namespace ApiGateway.Data.Entity.AppUser
 
         public void Update(AppUser user)
         {
+            user.LastModifiedDate = DateTime.Now;
+
             var updatedEntity = _context.Entry(user);
             updatedEntity.State = EntityState.Modified;
 

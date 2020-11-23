@@ -25,8 +25,8 @@ namespace ApiGateway.Controllers
             _logger = logger;
         }
 
-        [HttpPost]
         [AllowAnonymous]
+        [HttpPost]
         public IActionResult Login([FromBody] LoginModel login)
         {
             var result = _accountService.Authenticate(login);
