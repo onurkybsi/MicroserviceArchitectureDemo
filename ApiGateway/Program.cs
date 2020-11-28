@@ -7,7 +7,6 @@ using ApiGateway.Infrastructure;
 using ApiGateway.Services.Auth;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -18,7 +17,7 @@ namespace ApiGateway
     {
         public static void Main(string[] args)
         {
-            var configuration = GetConfiguration();
+            var configuration = InitialHelper.GetConfiguration(Directory.GetCurrentDirectory(), Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
 
             Log.Logger = CreateSerilogLogger(configuration);
 
@@ -38,14 +37,6 @@ namespace ApiGateway
                     webBuilder.UseStartup<Startup>();
                 }).ConfigureLogging(config => config.ClearProviders()).UseSerilog();
 
-        private static IConfiguration GetConfiguration()
-            => new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true)
-                .AddEnvironmentVariables()
-                .Build();
-
         private static Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
             => new LoggerConfiguration()
                 .ReadFrom.Configuration(configuration)
@@ -53,19 +44,15 @@ namespace ApiGateway
 
         private static void SeedAppUserDb(IHost host, AppUser admin)
         {
-            using (var scope = host.Services.CreateScope())
+            try
             {
-                var services = scope.ServiceProvider;
-
-                try
-                {
-                    Initializer.SeedData<ApiGatewayDbContext, AppUser>(new List<AppUser> { admin });
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex, "An error occurred seeding the AppUserDb.");
-                }
+                InitialHelper.SeedData<ApiGatewayDbContext, AppUser>(new List<AppUser> { admin });
             }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "An error occurred seeding the AppUserDb.");
+            }
+
         }
 
         private static AppUser GetAdminUser(IConfiguration configuration)

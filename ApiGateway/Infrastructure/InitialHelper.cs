@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ApiGateway.Infrastructure
 {
-    public static class Initializer
+    public static class InitialHelper
     {
         public static void SeedData<TContext, TEntity>(IServiceProvider serviceProvider, List<TEntity> entities)
             where TContext : DbContext
@@ -41,5 +42,13 @@ namespace ApiGateway.Infrastructure
                 }
             }
         }
+
+        public static IConfiguration GetConfiguration(string basePath, string environment)
+            => new ConfigurationBuilder()
+                .SetBasePath(basePath)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{environment}.json", optional: true)
+                .AddEnvironmentVariables()
+                .Build();
     }
 }

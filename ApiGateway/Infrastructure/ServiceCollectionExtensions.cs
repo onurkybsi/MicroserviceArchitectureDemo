@@ -10,7 +10,7 @@ namespace ApiGateway.Infrastructure
     {
         private static bool isEnvDev = Startup.StaticConfiguration["ASPNETCORE_ENVIRONMENT"] == "Development";
 
-        public static IServiceCollection AddJwtAuth(this IServiceCollection services, IAuthConfig jWTAuthConfig)
+        public static IServiceCollection AddJwtAuth(this IServiceCollection services, IAuthConfig authConfig)
         {
             services.AddAuthentication(x =>
                 {
@@ -27,8 +27,8 @@ namespace ApiGateway.Infrastructure
                         ValidateIssuer = !isEnvDev,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = jWTAuthConfig.Issuer,
-                        ValidAudience = jWTAuthConfig.Audience,
+                        ValidIssuer = authConfig.Issuer,
+                        ValidAudience = authConfig.Audience,
                         IssuerSigningKey = new SymmetricSecurityKey(new byte[1]),
                         ClockSkew = TimeSpan.Zero
                     };
