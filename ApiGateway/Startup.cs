@@ -28,7 +28,7 @@ namespace ApiGateway
             Log.Information("ApiGateway listening...");
 
             // ConfigureAuthConfig(services);
-            services.ConfigureManuel<AuthConfig>(Configuration, ac => ac.SecurityKey = Encoding.ASCII.GetBytes(Configuration["AuthConfig:SecurityKey"]));
+            services.ConfigureManuelly<AuthConfig>(Configuration, ac => ac.SecurityKey = Encoding.ASCII.GetBytes(Configuration["AuthConfig:SecurityKey"]));
 
             services.AddSingleton<IAuthConfig>(sp => sp.GetRequiredService<AuthConfig>());
 

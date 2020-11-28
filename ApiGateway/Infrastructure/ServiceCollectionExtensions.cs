@@ -44,7 +44,7 @@ namespace ApiGateway.Infrastructure
             return services;
         }
 
-        public static IServiceCollection ConfigureManuel<TConfig>(this IServiceCollection services, IConfiguration Configuration, Action<TConfig> manuelSettings)
+        public static IServiceCollection ConfigureManuelly<TConfig>(this IServiceCollection services, IConfiguration Configuration, Action<TConfig> manuelSettings)
             where TConfig : class, new()
         {
             var mapped = (TConfig)Activator.CreateInstance(typeof(TConfig));
