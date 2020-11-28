@@ -1,8 +1,6 @@
 using System.Text;
-using ApiGateway.Data.AppUser;
 using ApiGateway.Infrastructure;
 using ApiGateway.Model;
-using ApiGateway.Services.Auth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -34,8 +32,7 @@ namespace ApiGateway
 
             services.AddSingleton<IAuthConfig>(sp => sp.GetRequiredService<AuthConfig>());
 
-            services.RegisterModule(new Data.Descriptor());
-            services.RegisterModule(new Services.Descriptor());
+            RegisterModules(services);
 
             services.AddControllers()
                 .AddNewtonsoftJson();
@@ -64,15 +61,11 @@ namespace ApiGateway
                 endpoints.MapControllers();
             });
         }
-        private void ConfigureAuthConfig(IServiceCollection services)
+
+        private static void RegisterModules(IServiceCollection services)
         {
-            var authConfig = new AuthConfig();
-
-            Configuration.GetSection("AuthConfig").Bind(authConfig);
-
-            authConfig.SecurityKey = Encoding.ASCII.GetBytes(Configuration["AuthConfig:SecurityKey"]);
-
-            services.Add(ServiceDescriptor.Singleton(authConfig));
+            services.RegisterModule(Data.Descriptor.GetDescriptor());
+            services.RegisterModule(Services.Descriptor.GetDescriptor());
         }
     }
 }

@@ -5,15 +5,14 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace ApiGateway.Services
 {
-    public class Descriptor : IModuleDescriptor
+    public class Descriptor : ModuleDescriptor<Descriptor>
     {
-        public List<ServiceDescriptor> Describe()
+        private static List<ServiceDescriptor> Descriptions = new List<ServiceDescriptor>()
         {
-            List<ServiceDescriptor> descriptions = new List<ServiceDescriptor>();
+            ServiceDescriptor.Singleton(typeof(IAuthService), typeof(AuthService))
+        };
 
-            descriptions.Add(ServiceDescriptor.Singleton(typeof(IAuthService), typeof(AuthService)));
-
-            return descriptions;
-        }
+        public override List<ServiceDescriptor> GetDescriptions()
+            => Descriptions;
     }
 }

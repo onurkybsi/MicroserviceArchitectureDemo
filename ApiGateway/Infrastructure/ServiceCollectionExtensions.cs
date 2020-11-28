@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,7 +39,7 @@ namespace ApiGateway.Infrastructure
 
         public static IServiceCollection RegisterModule(this IServiceCollection services, IModuleDescriptor moduleDescriptor)
         {
-            moduleDescriptor.Describe().ForEach(description => services.Add(description));
+            moduleDescriptor.GetDescriptions().ForEach(description => services.Add(description));
 
             return services;
         }

@@ -7,13 +7,26 @@ namespace ApiGateway.Data
 {
     public class Descriptor : IModuleDescriptor
     {
-        public List<ServiceDescriptor> Describe()
+        private static Descriptor instance;
+
+        private static List<ServiceDescriptor> Descriptions = new List<ServiceDescriptor>()
         {
-            List<ServiceDescriptor> descriptions = new List<ServiceDescriptor>();
+            ServiceDescriptor.Singleton(typeof(IAppUserRepo), typeof(AppUserRepo))
+        };
 
-            descriptions.Add(ServiceDescriptor.Singleton(typeof(IAppUserRepo), typeof(AppUserRepo)));
+        private Descriptor() { }
 
-            return descriptions;
+        public static Descriptor GetDescriptor()
+            => instance ?? (instance = new Descriptor());
+
+        public List<ServiceDescriptor> GetDescriptions()
+            => Descriptions;
+
+        public IServiceCollection Describe(IServiceCollection services)
+        {
+            Descriptions.ForEach(d => services.Add(d));
+
+            return services;
         }
     }
 }

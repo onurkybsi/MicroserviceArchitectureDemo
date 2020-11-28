@@ -5,6 +5,7 @@ namespace ApiGateway.Infrastructure
 {
     public interface IModuleDescriptor
     {
-        List<ServiceDescriptor> Describe();
+        List<ServiceDescriptor> GetDescriptions();
+        IServiceCollection Describe(IServiceCollection services);
     }
 }
