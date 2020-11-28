@@ -5,28 +5,14 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace ApiGateway.Data
 {
-    public class Descriptor : IModuleDescriptor
+    public class Descriptor : ModuleDescriptor<Data.Descriptor>
     {
-        private static Descriptor instance;
-
         private static List<ServiceDescriptor> Descriptions = new List<ServiceDescriptor>()
         {
             ServiceDescriptor.Singleton(typeof(IAppUserRepo), typeof(AppUserRepo))
         };
 
-        private Descriptor() { }
-
-        public static Descriptor GetDescriptor()
-            => instance ?? (instance = new Descriptor());
-
-        public List<ServiceDescriptor> GetDescriptions()
+        public override List<ServiceDescriptor> GetDescriptions()
             => Descriptions;
-
-        public IServiceCollection Describe(IServiceCollection services)
-        {
-            Descriptions.ForEach(d => services.Add(d));
-
-            return services;
-        }
     }
 }

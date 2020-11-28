@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace ApiGateway.Services
 {
-    public class Descriptor : ModuleDescriptor<Descriptor>
+    public class Descriptor : ModuleDescriptor<Services.Descriptor>
     {
         private static List<ServiceDescriptor> Descriptions = new List<ServiceDescriptor>()
         {
