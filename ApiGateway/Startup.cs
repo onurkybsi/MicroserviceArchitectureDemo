@@ -27,10 +27,16 @@ namespace ApiGateway
         {
             Log.Information("ApiGateway listening...");
 
-            // ConfigureAuthConfig(services);
             services.ConfigureManuelly<AuthConfig>(Configuration, ac => ac.SecurityKey = Encoding.ASCII.GetBytes(Configuration["AuthConfig:SecurityKey"]));
 
             services.AddSingleton<IAuthConfig>(sp => sp.GetRequiredService<AuthConfig>());
+
+            services.AddJwtAuth(new AuthConfig
+            {
+                SecurityKey = Encoding.ASCII.GetBytes(Configuration["AuthConfig:SecurityKey"]),
+                Audience = Configuration["AuthConfig:Audience"],
+                Issuer = Configuration["AuthConfig:Issuer"]
+            });
 
             RegisterModules(services);
 
@@ -40,7 +46,7 @@ namespace ApiGateway
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            Log.Information($"ApiGateway on: {env.EnvironmentName}, Connection string: {Configuration["APPUSERDB_CONNECTION_STRING"]}");
+            Log.Information($"ApiGateway on: {env.EnvironmentName}");
 
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();

@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace ApiGateway.Infrastructure
 {
+    // ModuleDescriptor ler IDisposable olabilir tanımlar register olduktan sonra bu instance'larını yaşamasına gerek yok.
     public abstract class ModuleDescriptor<T> : IModuleDescriptor
     {
         protected static T instance;

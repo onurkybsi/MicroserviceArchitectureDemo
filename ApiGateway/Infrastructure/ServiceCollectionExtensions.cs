@@ -29,7 +29,7 @@ namespace ApiGateway.Infrastructure
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = authConfig.Issuer,
                         ValidAudience = authConfig.Audience,
-                        IssuerSigningKey = new SymmetricSecurityKey(new byte[1]),
+                        IssuerSigningKey = new SymmetricSecurityKey(authConfig.SecurityKey),
                         ClockSkew = TimeSpan.Zero
                     };
                 });

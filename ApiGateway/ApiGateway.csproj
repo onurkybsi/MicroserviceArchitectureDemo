@@ -22,4 +22,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.10" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="../ServiceConnectionBases/.NetCore/ConnectionCheck/ConnectionCheck.csproj" />
+  </ItemGroup>
+
 </Project>
