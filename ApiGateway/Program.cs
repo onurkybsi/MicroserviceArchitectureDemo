@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using ApiGateway.Data.Entity.AppUser;
+using ApiGateway.Data;
+using ApiGateway.Data.AppUser;
 using ApiGateway.Infrastructure;
 using ApiGateway.Services.Auth;
 using Microsoft.AspNetCore.Hosting;
@@ -41,6 +42,7 @@ namespace ApiGateway
             => new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true)
                 .AddEnvironmentVariables()
                 .Build();
 
@@ -57,7 +59,7 @@ namespace ApiGateway
 
                 try
                 {
-                    Initializer.SeedData<AppUserDbContext, AppUser>(services, new List<AppUser> { admin });
+                    Initializer.SeedData<ApiGatewayDbContext, AppUser>(new List<AppUser> { admin });
                 }
                 catch (Exception ex)
                 {

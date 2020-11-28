@@ -1,10 +1,10 @@
-using ApiGateway.Data.Entity.AppUser;
-using ApiGateway.Data.Model;
+using System.Text;
+using ApiGateway.Data.AppUser;
 using ApiGateway.Infrastructure;
+using ApiGateway.Model;
 using ApiGateway.Services.Auth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -16,6 +16,7 @@ namespace ApiGateway
     {
         public IConfiguration Configuration { get; }
 
+        // Sadece bu yetmiyor mu ? Neden yukardakide var ?
         public static IConfiguration StaticConfiguration { get; private set; }
 
         public Startup(IConfiguration configuration)
@@ -28,20 +29,13 @@ namespace ApiGateway
         {
             Log.Information("ApiGateway listening...");
 
-            services.AddDbContext<AppUserDbContext>(options => options.UseSqlServer(Configuration["APPUSERDB_CONNECTION_STRING"]));
+            // ConfigureAuthConfig(services);
+            services.ConfigureManuel<AuthConfig>(Configuration, ac => ac.SecurityKey = Encoding.ASCII.GetBytes(Configuration["AuthConfig:SecurityKey"]));
 
-            services.AddScoped<IAppUserRepo, AppUserRepo>();
+            services.AddSingleton<IAuthConfig>(sp => sp.GetRequiredService<AuthConfig>());
 
-            MapConfigurations(services);
-
-            services.AddJwtAuth(new AuthConfig
-            {
-                Issuer = Configuration["AuthConfig:Issuer"],
-                Audience = Configuration["AuthConfig:Audience"],
-                SecurityKey = Configuration["AuthConfig:SecurityKey"]
-            });
-
-            services.AddScoped<IAuthService, AuthService>();
+            services.RegisterModule(new Data.Descriptor());
+            services.RegisterModule(new Services.Descriptor());
 
             services.AddControllers()
                 .AddNewtonsoftJson();
@@ -70,10 +64,15 @@ namespace ApiGateway
                 endpoints.MapControllers();
             });
         }
-
-        private void MapConfigurations(IServiceCollection services)
+        private void ConfigureAuthConfig(IServiceCollection services)
         {
-            services.Configure<AuthConfig>(Configuration.GetSection("AuthConfig"));
+            var authConfig = new AuthConfig();
+
+            Configuration.GetSection("AuthConfig").Bind(authConfig);
+
+            authConfig.SecurityKey = Encoding.ASCII.GetBytes(Configuration["AuthConfig:SecurityKey"]);
+
+            services.Add(ServiceDescriptor.Singleton(authConfig));
         }
     }
 }

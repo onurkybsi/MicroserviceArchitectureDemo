@@ -1,11 +1,9 @@
 using System;
 using System.Security.Claims;
-using System.Text;
 using System.IdentityModel.Tokens.Jwt;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using ApiGateway.Data.Entity.AppUser;
-using ApiGateway.Data.Model;
+using ApiGateway.Data.AppUser;
+using ApiGateway.Infrastructure;
 
 namespace ApiGateway.Services.Auth
 {
@@ -13,19 +11,19 @@ namespace ApiGateway.Services.Auth
     {
         private static string SaltPointer = Startup.StaticConfiguration["SaltPointer"];
 
-        private readonly AuthConfig _authConfig;
+        private readonly IAuthConfig _authConfig;
         private readonly IAppUserRepo _repo;
 
-        public AuthService(IOptions<AuthConfig> authConfig, IAppUserRepo repo)
+        public AuthService(IAuthConfig authConfig, IAppUserRepo repo)
         {
             _repo = repo;
-            _authConfig = authConfig.Value;
+            _authConfig = authConfig;
         }
 
         // TO-DO: Bu metot EncryptionHelper a bağımlı durumda şuan saltPointer üzerinden. Bunu düşün.
         public AuthResult Authenticate(ILoginModel login)
         {
-            var user = _repo.GetByFilter(u => u.Email == login.Email);
+            var user = _repo.Get(u => u.Email == login.Email);
             if (user is null)
                 return new AuthResult
                 {
@@ -58,8 +56,6 @@ namespace ApiGateway.Services.Auth
         {
             var tokenHandler = new JwtSecurityTokenHandler();
 
-            var secretKey = Encoding.ASCII.GetBytes(_authConfig.SecurityKey);
-
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]
@@ -72,7 +68,7 @@ namespace ApiGateway.Services.Auth
                 Audience = _authConfig.Audience,
                 Issuer = _authConfig.Issuer,
                 Expires = DateTime.UtcNow.AddMinutes(2),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKey), SecurityAlgorithms.HmacSha256Signature)
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(_authConfig.SecurityKey), SecurityAlgorithms.HmacSha256Signature)
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);

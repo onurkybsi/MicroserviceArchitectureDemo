@@ -1,10 +1,8 @@
 using System;
 using System.Linq;
-using System.Threading.Tasks;
-using ApiGateway.Data.Entity.AppUser;
-using ApiGateway.Data.Model;
+using ApiGateway.Data.AppUser;
+using ApiGateway.Model;
 using ApiGateway.Services.Auth;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -54,7 +52,7 @@ namespace ApiGateway.Controllers
 
             _repo.Add(addedUser);
 
-            return Ok(_repo.GetByFilter(u => u.Email == newUser.Email));
+            return Ok(_repo.Get(u => u.Email == newUser.Email));
         }
 
         [HttpGet]
@@ -62,7 +60,7 @@ namespace ApiGateway.Controllers
         {
             int currentUserId = Convert.ToInt32(HttpContext.User.Claims.FirstOrDefault(cu => cu.Type == "userId")?.Value);
 
-            AppUser currentUser = _repo.GetByFilter(cu => cu.Id == currentUserId);
+            AppUser currentUser = _repo.Get(cu => cu.Id == currentUserId);
 
             return Ok(currentUser);
         }

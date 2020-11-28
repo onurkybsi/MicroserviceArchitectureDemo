@@ -1,7 +1,7 @@
 using System;
-using System.Text;
-using ApiGateway.Data.Model;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
@@ -11,7 +11,7 @@ namespace ApiGateway.Infrastructure
     {
         private static bool isEnvDev = Startup.StaticConfiguration["ASPNETCORE_ENVIRONMENT"] == "Development";
 
-        public static IServiceCollection AddJwtAuth(this IServiceCollection services, AuthConfig jWTAuthConfig)
+        public static IServiceCollection AddJwtAuth(this IServiceCollection services, IAuthConfig jWTAuthConfig)
         {
             services.AddAuthentication(x =>
                 {
@@ -30,10 +30,31 @@ namespace ApiGateway.Infrastructure
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = jWTAuthConfig.Issuer,
                         ValidAudience = jWTAuthConfig.Audience,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jWTAuthConfig.SecurityKey)),
+                        IssuerSigningKey = new SymmetricSecurityKey(new byte[1]),
                         ClockSkew = TimeSpan.Zero
                     };
                 });
+
+            return services;
+        }
+
+        public static IServiceCollection RegisterModule(this IServiceCollection services, IModuleDescriptor moduleDescriptor)
+        {
+            moduleDescriptor.Describe().ForEach(description => services.Add(description));
+
+            return services;
+        }
+
+        public static IServiceCollection ConfigureManuel<TConfig>(this IServiceCollection services, IConfiguration Configuration, Action<TConfig> manuelSettings)
+            where TConfig : class, new()
+        {
+            var mapped = (TConfig)Activator.CreateInstance(typeof(TConfig));
+
+            Configuration.GetSection(typeof(TConfig).Name).Bind(mapped);
+
+            manuelSettings(mapped);
+
+            services.Add(ServiceDescriptor.Singleton(mapped));
 
             return services;
         }

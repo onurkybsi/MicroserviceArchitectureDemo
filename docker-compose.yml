@@ -1,10 +1,12 @@
 version: "3.4"
 services:
-  db:
+  app-user-db:
     image: "mcr.microsoft.com/mssql/server:2017-latest"
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=1Secure*Password1
+    ports:
+      - "1433:1433"
   seq-log:
     image: datalust/seq:latest
     environment:
@@ -18,5 +20,5 @@ services:
     env_file:
       - ./ApiGateway/dev-docker.env
     depends_on:
-      - db
+      - app-user-db
       - seq-log

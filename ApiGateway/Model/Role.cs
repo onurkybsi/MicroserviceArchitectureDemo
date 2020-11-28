@@ -1,4 +1,4 @@
-namespace ApiGateway.Data.Model
+namespace ApiGateway.Model
 {
     public static class Role
     {
