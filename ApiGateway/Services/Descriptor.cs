@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using ApiGateway.Infrastructure;
+using Infrastructure;
 using ApiGateway.Services.Auth;
 using Microsoft.Extensions.DependencyInjection;
 

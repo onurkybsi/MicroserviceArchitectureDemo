@@ -1,10 +1,7 @@
 using System.Linq;
-using System.Security.Claims;
-using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Serilog;
 
 namespace ApiGateway.Controllers
 {
@@ -26,8 +23,6 @@ namespace ApiGateway.Controllers
             _logger.LogInformation($"{HttpContext.User.Claims.First(c => c.Type == "userId")} in api/test/test");
 
             return StatusCode(200);
-        }
-
-        
+        }   
     }
 }

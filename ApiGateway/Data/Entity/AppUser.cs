@@ -1,5 +1,5 @@
 using System;
-using ApiGateway.Infrastructure.Data;
+using Infrastructure.Data;
 using Newtonsoft.Json;
 
 namespace ApiGateway.Data.AppUser

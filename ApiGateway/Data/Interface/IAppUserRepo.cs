@@ -1,4 +1,4 @@
-using ApiGateway.Infrastructure.Data;
+using Infrastructure.Data;
 
 namespace ApiGateway.Data.AppUser
 {

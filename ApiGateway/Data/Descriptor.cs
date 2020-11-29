@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using ApiGateway.Data.AppUser;
-using ApiGateway.Infrastructure;
+using Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ApiGateway.Data

@@ -23,6 +23,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="../Infrastructure/NetCoreInfrastructure/Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="../ServiceConnectionBases/.NetCore/ProductService/ProductService.csproj" />
   </ItemGroup>
 

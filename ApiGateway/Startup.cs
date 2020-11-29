@@ -1,6 +1,6 @@
 using System.Text;
-using ApiGateway.Infrastructure;
 using ApiGateway.Model;
+using Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
