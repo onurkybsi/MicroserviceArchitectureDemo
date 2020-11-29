@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.14.0" />
     <PackageReference Include="Grpc" Version="2.33.1" />
@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="../../protos/connectioncheck.proto" Link="connectioncheck.proto" />
+    <Protobuf Include="../../protos/productservice.proto" Link="productservice.proto" />
   </ItemGroup>
 	
 </Project>

@@ -1,0 +1,9 @@
+C:\Users\onurb\Source\Repos\MicroserviceArchitectureDemo\ServiceConnectionBases\.NetCore\ProductService\obj\Debug\netcoreapp3.1\ProductService.csprojAssemblyReference.cache
+C:\Users\onurb\Source\Repos\MicroserviceArchitectureDemo\ServiceConnectionBases\.NetCore\ProductService\bin\Debug\netcoreapp3.1\ProductService.deps.json
+C:\Users\onurb\Source\Repos\MicroserviceArchitectureDemo\ServiceConnectionBases\.NetCore\ProductService\bin\Debug\netcoreapp3.1\ProductService.dll
+C:\Users\onurb\Source\Repos\MicroserviceArchitectureDemo\ServiceConnectionBases\.NetCore\ProductService\bin\Debug\netcoreapp3.1\ProductService.pdb
+C:\Users\onurb\Source\Repos\MicroserviceArchitectureDemo\ServiceConnectionBases\.NetCore\ProductService\obj\Debug\netcoreapp3.1\ProductService.csproj.CoreCompileInputs.cache
+C:\Users\onurb\Source\Repos\MicroserviceArchitectureDemo\ServiceConnectionBases\.NetCore\ProductService\obj\Debug\netcoreapp3.1\ProductService.AssemblyInfoInputs.cache
+C:\Users\onurb\Source\Repos\MicroserviceArchitectureDemo\ServiceConnectionBases\.NetCore\ProductService\obj\Debug\netcoreapp3.1\ProductService.AssemblyInfo.cs
+C:\Users\onurb\Source\Repos\MicroserviceArchitectureDemo\ServiceConnectionBases\.NetCore\ProductService\obj\Debug\netcoreapp3.1\ProductService.dll
+C:\Users\onurb\Source\Repos\MicroserviceArchitectureDemo\ServiceConnectionBases\.NetCore\ProductService\obj\Debug\netcoreapp3.1\ProductService.pdb

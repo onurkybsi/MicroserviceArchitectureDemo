@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "dgSpecHash": "7KJwYvVAGC6a4mcSBxU8o5fCUYmo0/jHZrNmiPzNldvlvenxMY3oOCoL06FJ5qcq/awW6z6BzutJ1MbzM4+EVw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\onurb\\Source\\Repos\\MicroserviceArchitectureDemo\\ServiceConnectionBases\\.NetCore\\ProductService\\ProductService.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\onurb\\.nuget\\packages\\google.protobuf\\3.14.0\\google.protobuf.3.14.0.nupkg.sha512",
+    "C:\\Users\\onurb\\.nuget\\packages\\grpc\\2.33.1\\grpc.2.33.1.nupkg.sha512",
+    "C:\\Users\\onurb\\.nuget\\packages\\grpc.core\\2.33.1\\grpc.core.2.33.1.nupkg.sha512",
+    "C:\\Users\\onurb\\.nuget\\packages\\grpc.core.api\\2.33.1\\grpc.core.api.2.33.1.nupkg.sha512",
+    "C:\\Users\\onurb\\.nuget\\packages\\grpc.tools\\2.33.1\\grpc.tools.2.33.1.nupkg.sha512",
+    "C:\\Users\\onurb\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512",
+    "C:\\Users\\onurb\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\4.5.2\\system.runtime.compilerservices.unsafe.4.5.2.nupkg.sha512"
+  ],
+  "logs": []
+}
