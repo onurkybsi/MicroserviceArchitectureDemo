@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../ServiceConnectionBases/.NetCore/ConnectionCheck/ConnectionCheck.csproj" />
+    <ProjectReference Include="../ServiceConnectionBases/.NetCore/ProductService/ProductService.csproj" />
   </ItemGroup>
 
 </Project>
