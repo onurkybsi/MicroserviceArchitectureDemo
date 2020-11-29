@@ -1,8 +1,15 @@
+//#region Imports
 const grpc = require("grpc");
-var protoLoader = require("@grpc/proto-loader");
+const protoLoader = require("@grpc/proto-loader");
+
+const mongoose = require("mongoose");
+require("dotenv").config({path: `${__dirname}/dev.env`});
+
+const productService = require("./services/productService");
+//#endregion
 
 const packageDefinition = protoLoader.loadSync(
-  "../../ServiceConnectionBases/protos/connectioncheck.proto",
+  `${__dirname}/${process.env.PROTO_FILE_PATH}`,
   {
     keepCase: true,
     longs: String,
@@ -12,18 +19,26 @@ const packageDefinition = protoLoader.loadSync(
   }
 );
 
-const connectionCheck = grpc.loadPackageDefinition(packageDefinition)
-  .connectioncheck;
+const connectToMongo = async (dbUrl) => {
+  await mongoose.connect(dbUrl, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+};
 
-function sayHello(call, callback) {
-  console.log(call.request.name);
-  callback(null, { message: "Hello from ProductService to ApiGateway !" });
-}
+const registerServices = (server) => {
+  const grpcPackage = grpc.loadPackageDefinition(packageDefinition).product;
 
-function main() {
+  server.addService(grpcPackage.ProductService.service, productService);
+};
+
+async function main() {
+  await connectToMongo(process.env.PRODUCTDB_CONNECTION_STRING);
+
   const server = new grpc.Server();
-  server.addService(connectionCheck.Greet.service, { sayHello: sayHello });
-  server.bind("127.0.0.1:30051", grpc.ServerCredentials.createInsecure());
+  registerServices(server);
+
+  server.bind(process.env.SERVICE_URL, grpc.ServerCredentials.createInsecure());
   server.start();
 }
 

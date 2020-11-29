@@ -8,7 +8,7 @@ var products = [];
 for (let i = 1; i <= 500; i++) {
   var category = faker.helpers.randomize(categories);
   products.push({
-    id: i,
+    // id: i,
     name: faker.commerce.productName(),
     category: category,
     description: `${category}: ${faker.lorem.sentence(3)}`,
