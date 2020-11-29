@@ -1,8 +1,8 @@
 const productCollection = require("../data/productCollection");
 
-const getAllProducts = async () => {
-  return await productCollection.find();
-};
+const getAllProducts = async ()
+  => await productCollection.find();
+
 
 async function GetList(call, callback) {
   let products = await getAllProducts();
@@ -10,8 +10,4 @@ async function GetList(call, callback) {
   callback(null, { products: products });
 }
 
-async function Insert(insertedList) {
-  await productCollection.insertMany(insertedList);
-}
-
-module.exports = { GetList, Insert };
+module.exports = { GetList };
