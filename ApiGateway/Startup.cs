@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using static ApiGateway.Services.GrpcService.Helper;
 
 namespace ApiGateway
 {
@@ -40,6 +41,8 @@ namespace ApiGateway
 
             RegisterModules(services);
 
+            RegisterGrpcChannels(services);
+
             services.AddControllers()
                 .AddNewtonsoftJson();
         }
@@ -72,6 +75,23 @@ namespace ApiGateway
         {
             services.RegisterModule(Data.Descriptor.GetDescriptor());
             services.RegisterModule(Services.Descriptor.GetDescriptor());
+        }
+
+        private void RegisterGrpcChannels(IServiceCollection services)
+        {
+            // More client objects can reuse the same channel. 
+            // Creating a channel is an expensive operation compared to invoking a remote call 
+            // so in general you should reuse a single channel for as many calls as possible.
+
+            // Yeni servisler eklenince else if ile yeni servisleri ekle !
+            // Bu yapı hızlı mı emin miyiz ? Test edelim diğer yollar ile karşılaştıralım.
+            services.AddSingleton<ChannelResolver>(cr => (target) =>
+            {
+                if (target == Configuration["PRODUCT_SERVICE_URL"])
+                    return new Grpc.Core.Channel(Configuration["PRODUCT_SERVICE_URL"], Grpc.Core.ChannelCredentials.Insecure);
+
+                return null;
+            });
         }
     }
 }

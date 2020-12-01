@@ -2,6 +2,7 @@ using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using static ApiGateway.Services.GrpcService.Helper;
 
 namespace ApiGateway.Controllers.ProductService
 {
@@ -11,22 +12,20 @@ namespace ApiGateway.Controllers.ProductService
     public class ProductServiceController : ControllerBase
     {
         private readonly IConfiguration _configuration;
+        private readonly Channel _channel;
 
-        public ProductServiceController(IConfiguration configuration)
+        public ProductServiceController(IConfiguration configuration, ChannelResolver channelResolver)
         {
             _configuration = configuration;
+            _channel = channelResolver(_configuration["PRODUCT_SERVICE_URL"]);
         }
 
         [HttpGet]
         public IActionResult GetList(string message)
         {
-            Channel channel = new Channel(_configuration["PRODUCT_SERVICE_URL"], ChannelCredentials.Insecure);
-
-            var client = new Product.ProductService.ProductServiceClient(channel);
+            var client = new Product.ProductService.ProductServiceClient(_channel);
 
             var reply = client.GetList(new Product.GetListRequest { Query = string.Empty });
-
-            channel.ShutdownAsync().Wait();
 
             return Ok(reply.Products);
         }
