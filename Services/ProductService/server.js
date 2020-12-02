@@ -13,6 +13,7 @@ require("dotenv").config({
 const productService = require("./service/productService");
 //#endregion
 
+
 const packageDefinition = protoLoader.loadSync(
   `${__dirname}/${process.env.PROTO_FILE_PATH}`,
   {
@@ -23,6 +24,7 @@ const packageDefinition = protoLoader.loadSync(
     oneofs: true,
   }
 );
+
 
 const logger = bunyan.createLogger({
   name: "server",
@@ -37,6 +39,7 @@ const logger = bunyan.createLogger({
     }),
   ],
 });
+
 
 const connectToMongo = async (dbUrl) => {
   await mongoose.connect(dbUrl, {
