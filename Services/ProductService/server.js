@@ -3,9 +3,11 @@ const grpc = require("grpc");
 const protoLoader = require("@grpc/proto-loader");
 
 const mongoose = require("mongoose");
-require("dotenv").config({path: `${__dirname}/dev.env`});
+require("dotenv").config({
+  path: `${__dirname}/${process.env.ENVIRONMENT}.env`,
+});
 
-const productService = require("./services/productService");
+const productService = require("./service/productService");
 //#endregion
 
 const packageDefinition = protoLoader.loadSync(
@@ -33,13 +35,15 @@ const registerServices = (server) => {
 };
 
 async function main() {
+  console.log(`ProductService running on: ${process.env.ENVIRONMENT}`);
+  
   await connectToMongo(process.env.PRODUCTDB_CONNECTION_STRING);
 
-  const server = new grpc.Server();
-  registerServices(server);
+  // const server = new grpc.Server();
+  // registerServices(server);
 
-  server.bind(process.env.SERVICE_URL, grpc.ServerCredentials.createInsecure());
-  server.start();
+  // server.bind(process.env.SERVICE_URL, grpc.ServerCredentials.createInsecure());
+  // server.start();
 }
 
 main();

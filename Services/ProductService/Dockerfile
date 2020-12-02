@@ -10,5 +10,8 @@ RUN npm install
 
 COPY . .
 
+# docker-compose file a alınacak ! Burda kalmamalı !
+ENV ENVIRONMENT=DEV
+
 EXPOSE 3000
 CMD [ "node", "server.js" ]

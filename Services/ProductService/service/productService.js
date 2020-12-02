@@ -8,4 +8,9 @@ async function GetList(call, callback) {
   callback(null, { products: products });
 }
 
-module.exports = { GetList };
+//  To be developed
+async function InsertMany(insertedList) {
+  await productCollection.insertMany(insertedList);
+}
+
+module.exports = { GetList, InsertMany };

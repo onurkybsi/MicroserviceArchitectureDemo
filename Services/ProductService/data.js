@@ -103,4 +103,4 @@ for (let i = 1; i <= 500; i++) {
 // }
 //#endregion
 
-module.exports = () => ({ categories, products, orders });
+module.exports = () => ({ categories, products });
