@@ -1,4 +1,7 @@
 //#region Imports
+const bunyan = require("bunyan");
+const seq = require("bunyan-seq");
+
 const grpc = require("grpc");
 const protoLoader = require("@grpc/proto-loader");
 
@@ -21,6 +24,20 @@ const packageDefinition = protoLoader.loadSync(
   }
 );
 
+const logger = bunyan.createLogger({
+  name: "server",
+  streams: [
+    {
+      stream: process.stdout,
+      level: "warn",
+    },
+    seq.createStream({
+      serverUrl: "http://192.168.99.105:5341",
+      level: "info",
+    }),
+  ],
+});
+
 const connectToMongo = async (dbUrl) => {
   await mongoose.connect(dbUrl, {
     useNewUrlParser: true,
@@ -35,8 +52,8 @@ const registerServices = (server) => {
 };
 
 async function main() {
-  console.log(`ProductService running on: ${process.env.ENVIRONMENT}`);
-  
+  logger.info(`ProductService running on: ${process.env.ENVIRONMENT}`);
+
   await connectToMongo(process.env.PRODUCTDB_CONNECTION_STRING);
 
   // const server = new grpc.Server();
