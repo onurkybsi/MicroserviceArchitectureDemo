@@ -1,4 +1,4 @@
-const productCollection = require("../data/productCollection");
+const productCollection = require("../collection/productCollection");
 
 const getAllProducts = async () => await productCollection.find();
 

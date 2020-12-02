@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,13 +22,13 @@ namespace ApiGateway.Controllers.ProductService
         }
 
         [HttpGet]
-        public IActionResult GetList(string message)
+        public async Task<IActionResult> GetList(string message)
         {
             var client = new Product.ProductService.ProductServiceClient(_channel);
 
             var reply = client.GetList(new Product.GetListRequest { Query = string.Empty });
 
-            return Ok(reply.Products);
+            return await Task.FromResult(Ok(reply.Products));
         }
     }
 }
