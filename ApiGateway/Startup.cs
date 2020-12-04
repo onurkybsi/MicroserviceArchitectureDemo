@@ -1,5 +1,6 @@
 using System.Text;
 using ApiGateway.Model;
+using Grpc.Core;
 using Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,7 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using static ApiGateway.Services.GrpcService.Helper;
 
 namespace ApiGateway
 {
@@ -26,8 +26,6 @@ namespace ApiGateway
 
         public void ConfigureServices(IServiceCollection services)
         {
-            Log.Information("ApiGateway listening...");
-
             services.ConfigureManuelly<AuthConfig>(Configuration, ac => ac.SecurityKey = Encoding.ASCII.GetBytes(Configuration["AuthConfig:SecurityKey"]));
 
             services.AddSingleton<IAuthConfig>(sp => sp.GetRequiredService<AuthConfig>());
@@ -41,7 +39,7 @@ namespace ApiGateway
 
             RegisterModules(services);
 
-            RegisterGrpcChannels(services);
+            RegisterGrpcClients(services);
 
             services.AddControllers()
                 .AddNewtonsoftJson();
@@ -49,7 +47,7 @@ namespace ApiGateway
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            Log.Information($"ApiGateway on: {env.EnvironmentName}");
+            Log.Information($"ApiGateway listening on: {env.EnvironmentName}");
 
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
@@ -77,20 +75,13 @@ namespace ApiGateway
             services.RegisterModule(Services.Descriptor.GetDescriptor());
         }
 
-        private void RegisterGrpcChannels(IServiceCollection services)
+        private void RegisterGrpcClients(IServiceCollection services)
         {
-            // More client objects can reuse the same channel. 
-            // Creating a channel is an expensive operation compared to invoking a remote call 
-            // so in general you should reuse a single channel for as many calls as possible.
-
-            // Yeni servisler eklenince else if ile yeni servisleri ekle !
-            // Bu yapı hızlı mı emin miyiz ? Test edelim diğer yollar ile karşılaştıralım.
-            services.AddSingleton<ChannelResolver>(cr => (target) =>
+            services.AddSingleton(sp =>
             {
-                if (target == Configuration["PRODUCT_SERVICE_URL"])
-                    return new Grpc.Core.Channel(Configuration["PRODUCT_SERVICE_URL"], Grpc.Core.ChannelCredentials.Insecure);
+                var channel = new Channel(Configuration["PRODUCT_SERVICE_URL"], ChannelCredentials.Insecure);
 
-                return null;
+                return new Service.ProductService.ProductServiceClient(channel);
             });
         }
     }

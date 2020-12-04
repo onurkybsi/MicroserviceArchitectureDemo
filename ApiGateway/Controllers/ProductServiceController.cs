@@ -1,9 +1,6 @@
 using System.Threading.Tasks;
-using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using static ApiGateway.Services.GrpcService.Helper;
 
 namespace ApiGateway.Controllers.ProductService
 {
@@ -12,21 +9,18 @@ namespace ApiGateway.Controllers.ProductService
     [ApiController]
     public class ProductServiceController : ControllerBase
     {
-        private readonly IConfiguration _configuration;
-        private readonly Channel _channel;
+        private readonly Service.ProductService.ProductServiceClient _client;
 
-        public ProductServiceController(IConfiguration configuration, ChannelResolver channelResolver)
+        public ProductServiceController(Service.ProductService.ProductServiceClient client)
         {
-            _configuration = configuration;
-            _channel = channelResolver(_configuration["PRODUCT_SERVICE_URL"]);
+            _client = client;
+            
         }
 
         [HttpGet]
         public async Task<IActionResult> GetList(string message)
         {
-            var client = new Product.ProductService.ProductServiceClient(_channel);
-
-            var reply = client.GetList(new Product.GetListRequest { Query = string.Empty });
+            var reply = _client.GetList(new Service.GetListRequest { Query = string.Empty });
 
             return await Task.FromResult(Ok(reply.Products));
         }
