@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace ApiGateway.Controllers.ProductService
 {
@@ -10,19 +11,28 @@ namespace ApiGateway.Controllers.ProductService
     public class ProductServiceController : ControllerBase
     {
         private readonly Service.ProductService.ProductServiceClient _client;
+        private readonly ILogger<ProductServiceController> _logger;
 
-        public ProductServiceController(Service.ProductService.ProductServiceClient client)
+        public ProductServiceController(Service.ProductService.ProductServiceClient client, ILogger<ProductServiceController> logger)
         {
             _client = client;
-            
+            _logger = logger;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetList(string message)
+        public async Task<IActionResult> GetById(Service.GetByIdRequest request)
         {
-            var reply = _client.GetList(new Service.GetListRequest { Query = string.Empty });
+            var reply = await _client.GetByIdAsync(request);
 
-            return await Task.FromResult(Ok(reply.Products));
+            return Ok(reply.Product);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Save(Service.Product product)
+        {
+            var reply = await _client.SaveAsync(product);
+
+            return Ok(reply);
         }
     }
 }

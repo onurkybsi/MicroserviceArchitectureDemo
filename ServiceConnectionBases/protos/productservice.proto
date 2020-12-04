@@ -1,23 +1,30 @@
 syntax = "proto3";
 
-package product;
+package service;
 
 service ProductService {
-	rpc GetList(GetListRequest) returns (GetListResponse);
+	rpc GetById(GetByIdRequest) returns (GetByIdResponse);
+	rpc Save(Product) returns (SaveResponse);
 }
 
 message Product {
-	string id = 1;
+	int32 id = 1;
 	string name = 2;
 	string category = 3;
 	string description = 4;
 	int32 price = 5;
+	string photo = 6;
 }
 
-message GetListRequest {
-	string query = 1;
+message GetByIdRequest {
+	int32 id = 1;
 }
 
-message GetListResponse {
-	repeated Product products = 1;
+message GetByIdResponse {
+	Product product = 1;
+}
+
+message SaveResponse {
+	bool isSuccess = 1;
+	string messsage = 2;
 }
