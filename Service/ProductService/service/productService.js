@@ -4,6 +4,12 @@ const ResultMessage = require("../models/responseMessage");
 //#endregion
 
 const getAllProducts = async () => await productCollection.find();
+let nextProductId = productCollection
+  .findOne({ id: 1 })
+  .sort('-LAST_MOD')
+  .exec(function (err, doc) {
+    return doc.last_mod;
+  });
 const getSuccessfulSaveMessage = (id) => `${id} saved !`;
 
 async function GetById(call, callback) {
@@ -14,20 +20,21 @@ async function GetById(call, callback) {
 
 async function Save(call, callback) {
   let saveResponse = new ResultMessage();
+  console.log(nextProductId);
 
   let updatedPersonFilter = { id: call.request.id };
   let currentProduct = call.request;
   let saveOptions = { upsert: true, new: true, setDefaultsOnInsert: true };
 
-  let savedProduct = await productCollection.findOneAndUpdate(
+  let saveProductResult = await productCollection.findOneAndUpdate(
     updatedPersonFilter,
-    currentProduct,
+    { ...currentProduct, $inc: { id: 1 } },
     saveOptions
   );
 
-  if (savedProduct.id > 0) {
+  if (saveProductResult._doc.id > 0) {
     saveResponse.isSuccess = true;
-    saveResponse.message = getSuccessfulSaveMessage(savedProduct.id);
+    saveResponse.message = getSuccessfulSaveMessage(saveProductResult._doc.id);
   }
 
   callback(null, { saveResponse });

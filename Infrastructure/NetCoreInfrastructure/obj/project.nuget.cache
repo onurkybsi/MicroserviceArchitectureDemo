@@ -1,9 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "bti2AvJnJhNml8avxHA0TglXRZW20n6M8lQzehNRbX3ZD/O/fjM2t4r902kQj8OyBb+xi85Xz1RHdVDef0X7aA==",
+  "dgSpecHash": "YtY3cAYTCHq5ebMpjynfZtA72X2Isy9/4W02qilGHsayfR/pfxX64t+MGf5/VIRxTYIkACGlqmzQszP7jFKa8A==",
   "success": true,
   "projectFilePath": "C:\\Users\\onurb\\Source\\Repos\\MicroserviceArchitectureDemo\\Infrastructure\\NetCoreInfrastructure\\Infrastructure.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\onurb\\.nuget\\packages\\grpc.core\\2.34.0\\grpc.core.2.34.0.nupkg.sha512",
+    "C:\\Users\\onurb\\.nuget\\packages\\grpc.core.api\\2.34.0\\grpc.core.api.2.34.0.nupkg.sha512",
     "C:\\Users\\onurb\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\3.1.6\\microsoft.aspnetcore.authentication.jwtbearer.3.1.6.nupkg.sha512",
     "C:\\Users\\onurb\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.1\\microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",
     "C:\\Users\\onurb\\.nuget\\packages\\microsoft.bcl.hashcode\\1.1.0\\microsoft.bcl.hashcode.1.1.0.nupkg.sha512",
@@ -50,6 +52,7 @@
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.io.filesystem.primitives\\4.3.0\\system.io.filesystem.primitives.4.3.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.linq\\4.3.0\\system.linq.4.3.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.linq.expressions\\4.3.0\\system.linq.expressions.4.3.0.nupkg.sha512",
+    "C:\\Users\\onurb\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.objectmodel\\4.3.0\\system.objectmodel.4.3.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.reflection\\4.3.0\\system.reflection.4.3.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.reflection.emit\\4.3.0\\system.reflection.emit.4.3.0.nupkg.sha512",

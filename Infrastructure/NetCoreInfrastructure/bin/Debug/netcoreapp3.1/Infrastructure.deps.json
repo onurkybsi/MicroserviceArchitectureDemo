@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v3.1": {
       "Infrastructure/1.0.0": {
         "dependencies": {
+          "Grpc.Core": "2.34.0",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "3.1.6",
           "Microsoft.EntityFrameworkCore": "3.1.10",
           "Microsoft.Extensions.Configuration": "3.1.10",
@@ -15,6 +16,51 @@
         },
         "runtime": {
           "Infrastructure.dll": {}
+        }
+      },
+      "Grpc.Core/2.34.0": {
+        "dependencies": {
+          "Grpc.Core.Api": "2.34.0",
+          "System.Memory": "4.5.3"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Grpc.Core.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.34.0.0"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/linux-x64/native/libgrpc_csharp_ext.x64.so": {
+            "rid": "linux-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/osx-x64/native/libgrpc_csharp_ext.x64.dylib": {
+            "rid": "osx-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/grpc_csharp_ext.x64.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x86/native/grpc_csharp_ext.x86.dll": {
+            "rid": "win-x86",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Grpc.Core.Api/2.34.0": {
+        "dependencies": {
+          "System.Memory": "4.5.3"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Grpc.Core.Api.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.34.0.0"
+          }
         }
       },
       "Microsoft.AspNetCore.Authentication.JwtBearer/3.1.6": {
@@ -502,6 +548,7 @@
           "System.Threading": "4.3.0"
         }
       },
+      "System.Memory/4.5.3": {},
       "System.ObjectModel/4.3.0": {
         "dependencies": {
           "System.Collections": "4.3.0",
@@ -724,6 +771,20 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "Grpc.Core/2.34.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-A8QoX4TkOi9XcNUb70+ogPdGwH/BTSKZr1SoR64tABa+AGOWaVGirXPt8oU0OaPcwBHbKQ76rDJtXrWClE9MHw==",
+      "path": "grpc.core/2.34.0",
+      "hashPath": "grpc.core.2.34.0.nupkg.sha512"
+    },
+    "Grpc.Core.Api/2.34.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-TfxhML3GDy9Lo7Qk5Nax1ySGXNwxZQ3znVeV2n5SRHZC6EVoRSRy0foPAKrSgmyvrGlCdfsH4E2EmaLvCkNI2w==",
+      "path": "grpc.core.api/2.34.0",
+      "hashPath": "grpc.core.api.2.34.0.nupkg.sha512"
     },
     "Microsoft.AspNetCore.Authentication.JwtBearer/3.1.6": {
       "type": "package",
@@ -1046,6 +1107,13 @@
       "sha512": "sha512-PGKkrd2khG4CnlyJwxwwaWWiSiWFNBGlgXvJpeO0xCXrZ89ODrQ6tjEWS/kOqZ8GwEOUATtKtzp1eRgmYNfclg==",
       "path": "system.linq.expressions/4.3.0",
       "hashPath": "system.linq.expressions.4.3.0.nupkg.sha512"
+    },
+    "System.Memory/4.5.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3oDzvc/zzetpTKWMShs1AADwZjQ/36HnsufHRPcOjyRAAMLDlu2iD33MBI2opxnezcVUtXyqDXXjoFMOU9c7SA==",
+      "path": "system.memory/4.5.3",
+      "hashPath": "system.memory.4.5.3.nupkg.sha512"
     },
     "System.ObjectModel/4.3.0": {
       "type": "package",
