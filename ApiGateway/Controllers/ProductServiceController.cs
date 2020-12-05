@@ -1,7 +1,10 @@
+using System;
 using System.Threading.Tasks;
+using Infrastructure.Grpc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ApiGateway.Services.Controller;
 
 namespace ApiGateway.Controllers.ProductService
 {
@@ -22,17 +25,19 @@ namespace ApiGateway.Controllers.ProductService
         [HttpGet]
         public async Task<IActionResult> GetById(Service.GetByIdRequest request)
         {
-            var reply = await _client.GetByIdAsync(request);
+            var response = await GrpcCallerService.CallService<Service.GetByIdResponse>(_logger,
+                async () => await _client.GetByIdAsync(request, deadline: DateTime.UtcNow.AddSeconds(30)));
 
-            return Ok(reply.Product);
+            return ResponseHelper.PrepareActionResponse(this, response);
         }
 
         [HttpPost]
         public async Task<IActionResult> Save(Service.Product product)
         {
-            var reply = await _client.SaveAsync(product);
+            var response = await GrpcCallerService.CallService<Service.SaveResponse>(_logger,
+                async () => await _client.SaveAsync(product, deadline: DateTime.UtcNow.AddSeconds(30)));
 
-            return Ok(reply);
+            return ResponseHelper.PrepareActionResponse(this, response);
         }
     }
 }
