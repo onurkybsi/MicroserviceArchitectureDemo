@@ -1,16 +1,12 @@
 using System;
 using System.Threading.Tasks;
 using Grpc.Core;
-using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Grpc
 {
     public static class GrpcCallerService
     {
-        private static string RPC_EXCEPTION_MESSAGE = "Error occurred when service call";
-        private static string GENERAL_EXCEPTION_MESSAGE = "Unknown error occurred";
-
-        public static async Task<ServiceCallResult<TResponse>> CallService<TResponse>(ILogger logger, Func<Task<TResponse>> call)
+        public static async Task<ServiceCallResult<TResponse>> CallService<TResponse>(Func<Task<TResponse>> call)
         {
             var serviceCallResult = new ServiceCallResult<TResponse>();
 
@@ -18,6 +14,10 @@ namespace Infrastructure.Grpc
             {
                 var responseFromService = await call();
 
+                // TO-DO: Burası servisten isSuccess false döndüğündede true gitmiş oluyor. Ve 200 dönüyoruz. 
+                // Burda responseFromService TResponse oldugu için servisten dönen isSuccess i handle etmek mümkün değil.
+                // Bu konuda bi düşünelim ServiceCallResult objesi değişmeli mi bilemiyorum ?
+                // Burda servisi çağırırken oluşucak hata ile servis içi hata ayrıştırılmalı  hata kodları yazılmalı !;
                 serviceCallResult.IsSuccess = true;
                 serviceCallResult.ServiceResponse = responseFromService;
 
@@ -25,23 +25,17 @@ namespace Infrastructure.Grpc
             }
             catch (RpcException rex)
             {
-                logger?.LogError("Error calling via grpc: {Status} - {Message}", rex.Status, rex.Message);
-
-                serviceCallResult.Message = RPC_EXCEPTION_MESSAGE;
+                // TO-DO: Mesaj olaylarıı böyle hard coded olmamalı
+                serviceCallResult.Message = string.Format("Error calling via grpc: {0} - {1}", rex.Status, rex.Message);
 
                 return serviceCallResult;
             }
             catch (Exception ex)
             {
-                logger?.LogError("Error occured: {Message}", ex.Message);
-
-                serviceCallResult.Message = GENERAL_EXCEPTION_MESSAGE;
+                serviceCallResult.Message = string.Format("Error occured: {0}", ex.Message);
 
                 return serviceCallResult;
             }
         }
-
-        public static async Task<ServiceCallResult<TResponse>> CallService<TResponse>(Func<Task<TResponse>> call)
-            => await CallService(null, call);
     }
 }
