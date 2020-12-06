@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "base.proto";
+
 package service;
 
 service ProductService {
@@ -21,10 +23,19 @@ message GetByIdRequest {
 }
 
 message GetByIdResponse {
-	Product product = 1;
+	ServiceProcessResult serviceProcessResult = 1;
+	Product product = 2;
+}
+
+message GetListByQueryRequest {
+	Product query = 1;
+}
+
+message GetListByQueryResponse {
+	ServiceProcessResult serviceProcessResult = 1;
+	repeated Product products = 2;
 }
 
 message SaveResponse {
-	bool isSuccess = 1;
-	string message = 2;
+	ServiceProcessResult serviceProcessResult = 1;
 }

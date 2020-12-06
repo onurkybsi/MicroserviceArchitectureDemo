@@ -14,11 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../Base/Base.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Protobuf Include="../../protos/productservice.proto" Link="productservice.proto" />
+    <Protobuf Include="../../protos/base.proto" Link="base.proto" />
   </ItemGroup>
 
 </Project>

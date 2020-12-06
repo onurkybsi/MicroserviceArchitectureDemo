@@ -1,12 +1,13 @@
 using System;
 using System.Threading.Tasks;
+using Google.Protobuf;
 using Grpc.Core;
 
 namespace Infrastructure.Grpc
 {
     public static class GrpcCallerService
     {
-        public static async Task<ServiceCallResult<TResponse>> CallService<TResponse>(Func<Task<TResponse>> call)
+        public static async Task<ServiceCallResult<TResponse>> CallService<TResponse>(Func<Task<TResponse>> call) where TResponse : IMessage<TResponse>
         {
             var serviceCallResult = new ServiceCallResult<TResponse>();
 

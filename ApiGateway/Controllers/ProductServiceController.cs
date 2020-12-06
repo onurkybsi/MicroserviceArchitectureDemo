@@ -28,9 +28,9 @@ namespace ApiGateway.Controllers.ProductService
             var response = await GrpcCallerService.CallService<Service.GetByIdResponse>(async () => await _client.GetByIdAsync(request, deadline: DateTime.UtcNow.AddSeconds(30)));
 
             if (!response.IsSuccess)
-                _logger.LogError($"{nameof(ProductServiceController)}: Get product by id unsuccessful: {response.Message}");
+                _logger.LogError($"{nameof(ProductServiceController)} call unsuccessful on GetProductById: {response.Message}");
 
-            return ResponseHelper.PrepareServiceCallResponse(this, response);
+            return ResponseHelper.PrepareServiceCallResponse(this, response.ServiceResponse.ServiceProcessResult.IsSuccess, response);
         }
 
         [HttpPost]
@@ -39,10 +39,10 @@ namespace ApiGateway.Controllers.ProductService
             var response = await GrpcCallerService.CallService<Service.SaveResponse>(async () => await _client.SaveAsync(product, deadline: DateTime.UtcNow.AddSeconds(30)));
 
             if (!response.IsSuccess)
-                _logger.LogError($"{nameof(ProductServiceController)}: Save product unsuccessful: {response.Message}");
+                _logger.LogError($"{nameof(ProductServiceController)} call unsuccessful on Save: {response.Message}");
 
 
-            return ResponseHelper.PrepareServiceCallResponse(this, response);
+            return ResponseHelper.PrepareServiceCallResponse(this, response.ServiceResponse.ServiceProcessResult.IsSuccess, response);
         }
     }
 }

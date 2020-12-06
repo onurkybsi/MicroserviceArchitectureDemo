@@ -1,4 +1,5 @@
 //#region Imports
+const { get } = require("mongoose");
 const productCollection = require("../collection/productCollection");
 const ResultMessage = require("../models/responseMessage");
 //#endregion
@@ -64,9 +65,20 @@ const updateProduct = async (doc) => {
 
 //#region Public methods
 const GetById = async (call, callback) => {
-  let product = await productCollection.findOne({ id: call.request.id });
+  let getByIdProcessResult = new ResultMessage(true);
+  let product = null;
 
-  callback(null, { product: product });
+  try {
+    product = await productCollection.findOne({ id: call.request.id });
+  } catch {
+    getByIdProcessResult.isSuccess = false;
+    getByIdProcessResult.message = EXTERNAL_ERR;
+  }
+
+  callback(null, {
+    serviceProcessResult: getByIdProcessResult,
+    product: product,
+  });
 };
 
 const Save = async (call, callback) => {
@@ -86,7 +98,7 @@ const Save = async (call, callback) => {
   } catch {
     saveResponse.message = EXTERNAL_ERR;
   }
-  callback(null, saveResponse);
+  callback(null, { serviceProcessResult: saveResponse });
 };
 //#endregion
 

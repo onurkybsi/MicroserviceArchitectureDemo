@@ -67,7 +67,7 @@ namespace ApiGateway.Services.Auth
 
                 Audience = _authConfig.Audience,
                 Issuer = _authConfig.Issuer,
-                Expires = DateTime.UtcNow.AddMinutes(2),
+                Expires = DateTime.UtcNow.AddMinutes(200),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(_authConfig.SecurityKey), SecurityAlgorithms.HmacSha256Signature)
             };
 
