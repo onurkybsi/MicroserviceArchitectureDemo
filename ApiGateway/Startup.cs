@@ -77,8 +77,10 @@ namespace ApiGateway
 
         private void RegisterGrpcClients(IServiceCollection services)
         {
+            // TO-DO: Yük testi yapımalı ! Duruma göre Scoped, Transient olarak değiştirilebilir.
             services.AddSingleton(sp =>
             {
+                // TO-DO: ChannelCredentials ayarlanmalı
                 var channel = new Channel(Configuration["PRODUCT_SERVICE_URL"], ChannelCredentials.Insecure);
 
                 return new Service.ProductService.ProductServiceClient(channel);
