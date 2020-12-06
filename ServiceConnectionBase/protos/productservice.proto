@@ -6,6 +6,7 @@ package service;
 
 service ProductService {
 	rpc GetById(GetByIdRequest) returns (GetByIdResponse);
+	rpc GetListByQuery(GetListByQueryRequest) returns (GetListByQueryResponse);
 	rpc Save(Product) returns (SaveResponse);
 }
 

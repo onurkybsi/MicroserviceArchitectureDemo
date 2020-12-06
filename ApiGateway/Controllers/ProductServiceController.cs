@@ -33,6 +33,18 @@ namespace ApiGateway.Controllers.ProductService
             return ResponseHelper.PrepareServiceCallResponse(this, response.ServiceResponse.ServiceProcessResult.IsSuccess, response);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetListByQuery(Service.GetListByQueryRequest request)
+        {
+            var response = await GrpcCallerService.CallService<Service.GetListByQueryResponse>(async ()
+                => await _client.GetListByQueryAsync(request, deadline: DateTime.UtcNow.AddSeconds(30)));
+
+            if (!response.IsSuccess)
+                _logger.LogError($"{nameof(ProductServiceController)} call unsuccessful on GetListByQuery: {response.Message}");
+
+            return ResponseHelper.PrepareServiceCallResponse(this, response.ServiceResponse.ServiceProcessResult.IsSuccess, response);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Save(Service.Product product)
         {

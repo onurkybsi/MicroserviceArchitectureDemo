@@ -2,6 +2,7 @@
 const { get } = require("mongoose");
 const productCollection = require("../collection/productCollection");
 const ResultMessage = require("../models/responseMessage");
+const Helper = require("./helper");
 //#endregion
 
 //#region Private variables
@@ -19,6 +20,18 @@ const getLastIdInDb = async () => {
     .select("id");
 
   return lastIdInDb["id"];
+};
+
+const getFilterForGetListByQuery = (product) => {
+  let queryFilter = {};
+
+  for (let prop in product) {
+    if (!Helper.HasDefaultValue(product[prop])) {
+      queryFilter[prop] = product[prop];
+    }
+  }
+
+  return queryFilter;
 };
 
 const setSaveResponseAsSuccessful = (saveResponse, id) => {
@@ -81,6 +94,25 @@ const GetById = async (call, callback) => {
   });
 };
 
+const GetListByQuery = async (call, callback) => {
+  let getListByQueryProcessResult = new ResultMessage(true);
+  let products = null;
+
+  let queryFilter = getFilterForGetListByQuery(call.request.query);
+
+  try {
+    products = await productCollection.find(queryFilter);
+  } catch {
+    getListByQueryProcessResult.isSuccess = false;
+    getListByQueryProcessResult.message = EXTERNAL_ERR;
+  }
+
+  callback(null, {
+    serviceProcessResult: getListByQueryProcessResult,
+    products: products,
+  });
+};
+
 const Save = async (call, callback) => {
   let saveResponse = new ResultMessage(false, INTERNAL_ERR);
   try {
@@ -102,4 +134,4 @@ const Save = async (call, callback) => {
 };
 //#endregion
 
-module.exports = { GetById, Save };
+module.exports = { GetById, GetListByQuery, Save };
