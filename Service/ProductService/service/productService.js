@@ -7,6 +7,8 @@ const Helper = require("./helper");
 
 //#region Private variables
 let lastId = 0;
+const SAVE_TRANSACTION = "SAVE_TRANSACTION";
+const DELETE_TRANSACTION = "DELETE_TRANSACTION";
 // TO-DO: Bunları tüm uygulamalar kullanacak. Kapsayan bir JSON da tutalım.
 const EXTERNAL_ERR = "EXTERNAL_ERR";
 const INTERNAL_ERR = "INTERNAL_ERR";
@@ -34,9 +36,15 @@ const getFilterForGetListByQuery = (product) => {
   return queryFilter;
 };
 
-const setSaveResponseAsSuccessful = (saveResponse, id) => {
-  saveResponse.isSuccess = true;
-  saveResponse.message = `${id} saved !`;
+const setTransactionResponseAsSuccessful = (
+  transactionResponse,
+  id,
+  transactionType
+) => {
+  transactionResponse.isSuccess = true;
+  transactionResponse.message = `${id} ${
+    transactionType === SAVE_TRANSACTION ? "saved !" : "deleted !"
+  }`;
 };
 
 const getNextId = async () => {
@@ -115,23 +123,56 @@ const GetListByQuery = async (call, callback) => {
 
 const Save = async (call, callback) => {
   let saveResponse = new ResultMessage(false, INTERNAL_ERR);
+
   try {
     if (call.request.id <= 0) {
       call.request.id = await getNextId();
 
       let insertResult = await insertProduct(call.request);
 
-      setSaveResponseAsSuccessful(saveResponse, insertResult.insertedProduct);
+      setTransactionResponseAsSuccessful(
+        saveResponse,
+        insertResult.insertedProduct,
+        SAVE_TRANSACTION
+      );
     } else {
       let updateResult = await updateProduct(call.request);
 
-      setSaveResponseAsSuccessful(saveResponse, updateResult.updatedProduct);
+      setTransactionResponseAsSuccessful(
+        saveResponse,
+        updateResult.updatedProduct,
+        SAVE_TRANSACTION
+      );
     }
   } catch {
     saveResponse.message = EXTERNAL_ERR;
   }
   callback(null, { serviceProcessResult: saveResponse });
 };
+
+const Delete = async (call, callback) => {
+  let deleteResponse = new ResultMessage(false, INTERNAL_ERR);
+
+  try {
+    let deleteResult = await productCollection.deleteOne({
+      id: call.request.id,
+    });
+
+    if (deleteResult.deletedCount === 1 || deleteResult.ok === 1) {
+      setTransactionResponseAsSuccessful(
+        deleteResponse,
+        call.request.id,
+        DELETE_TRANSACTION
+      );
+    }
+  } catch {
+    deleteResponse.message = EXTERNAL_ERR;
+  }
+
+  callback(null, {
+    serviceProcessResult: deleteResponse,
+  });
+};
 //#endregion
 
-module.exports = { GetById, GetListByQuery, Save };
+module.exports = { GetById, GetListByQuery, Save, Delete };

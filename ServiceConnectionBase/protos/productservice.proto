@@ -8,6 +8,7 @@ service ProductService {
 	rpc GetById(GetByIdRequest) returns (GetByIdResponse);
 	rpc GetListByQuery(GetListByQueryRequest) returns (GetListByQueryResponse);
 	rpc Save(Product) returns (SaveResponse);
+	rpc Delete(DeleteByIdRequest) returns (DeleteByIdResponse);
 }
 
 message Product {
@@ -38,5 +39,13 @@ message GetListByQueryResponse {
 }
 
 message SaveResponse {
+	ServiceProcessResult serviceProcessResult = 1;
+}
+
+message DeleteByIdRequest {
+	int32 id = 1;
+}
+
+message DeleteByIdResponse {
 	ServiceProcessResult serviceProcessResult = 1;
 }

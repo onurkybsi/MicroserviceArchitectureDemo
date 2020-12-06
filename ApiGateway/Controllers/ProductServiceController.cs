@@ -46,9 +46,21 @@ namespace ApiGateway.Controllers.ProductService
         }
 
         [HttpPost]
-        public async Task<IActionResult> Save(Service.Product product)
+        public async Task<IActionResult> Save(Service.Product request)
         {
-            var response = await GrpcCallerService.CallService<Service.SaveResponse>(async () => await _client.SaveAsync(product, deadline: DateTime.UtcNow.AddSeconds(30)));
+            var response = await GrpcCallerService.CallService<Service.SaveResponse>(async () => await _client.SaveAsync(request, deadline: DateTime.UtcNow.AddSeconds(30)));
+
+            if (!response.IsSuccess)
+                _logger.LogError($"{nameof(ProductServiceController)} call unsuccessful on Save: {response.Message}");
+
+
+            return ResponseHelper.PrepareServiceCallResponse(this, response.ServiceResponse.ServiceProcessResult.IsSuccess, response);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete(Service.DeleteByIdRequest request)
+        {
+            var response = await GrpcCallerService.CallService<Service.DeleteByIdResponse>(async () => await _client.DeleteAsync(request, deadline: DateTime.UtcNow.AddSeconds(30)));
 
             if (!response.IsSuccess)
                 _logger.LogError($"{nameof(ProductServiceController)} call unsuccessful on Save: {response.Message}");
