@@ -26,5 +26,5 @@ message GetByIdResponse {
 
 message SaveResponse {
 	bool isSuccess = 1;
-	string messsage = 2;
+	string message = 2;
 }
