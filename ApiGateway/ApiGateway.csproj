@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../ServiceConnectionBases/NetCore/ProductService/ProductService.csproj" />
+    <ProjectReference Include="../ServiceConnectionBase/NetCore/ProductService/ProductService.csproj" />
   </ItemGroup>
 
 </Project>
