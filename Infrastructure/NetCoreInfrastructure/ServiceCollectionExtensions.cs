@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using Grpc.Core;
+using Infrastructure.Grpc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -52,6 +55,24 @@ namespace Infrastructure
             manuelSettings(mapped);
 
             services.Add(ServiceDescriptor.Singleton(mapped));
+
+            return services;
+        }
+
+        public static IServiceCollection AddGrpcClientPool<TClient>(this IServiceCollection services, GrpcClientPoolConfig clientConfig)
+            where TClient : ClientBase
+        {
+            services.AddSingleton(p =>
+            {
+                return new GrpcClientPool<TClient>(clientConfig);
+            });
+
+            services.Add(ServiceDescriptor.Describe(typeof(TClient), (ServiceProvider) =>
+            {
+                var pool = ServiceProvider.GetRequiredService<GrpcClientPool<TClient>>();
+
+                return pool.Get();
+            }, ServiceLifetime.Transient));
 
             return services;
         }

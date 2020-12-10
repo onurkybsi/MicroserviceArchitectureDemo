@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using System.Text;
 using ApiGateway.Model;
 using Grpc.Core;
 using Infrastructure;
+using Infrastructure.Grpc;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -80,16 +82,17 @@ namespace ApiGateway
         {
             // Option - 1
             // TO-DO: Yük testi yapımalı ! Duruma göre Scoped, Transient olarak değiştirilebilir.
-            services.AddSingleton(sp =>
-            {
-                // TO-DO: ChannelCredentials ayarlanmalı
-                var channel = new Channel(Configuration["PRODUCT_SERVICE_URL"], ChannelCredentials.Insecure);
+            // services.AddSingleton(sp =>
+            // {
+            //     // TO-DO: ChannelCredentials ayarlanmalı
+            //     var channel = new Channel(Configuration["PRODUCT_SERVICE_URL"], ChannelCredentials.Insecure);
 
-                return new Service.ProductService.ProductServiceClient(channel);
-            });
+            //     return new Service.ProductService.ProductServiceClient(channel);
+            // });
 
 
-            // Option - 2 ObjectPool pattern dene !
+            // Option - 2 ObjectPool pattern
+            services.AddGrpcClientPool<Service.ProductService.ProductServiceClient>(new GrpcClientPoolConfig { TargetServerURL = Configuration["PRODUCT_SERVICE_URL"] });
         }
     }
 }
