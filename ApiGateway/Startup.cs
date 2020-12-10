@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.ObjectPool;
 using Serilog;
 
 namespace ApiGateway
@@ -77,6 +78,7 @@ namespace ApiGateway
 
         private void RegisterGrpcClients(IServiceCollection services)
         {
+            // Option - 1
             // TO-DO: Yük testi yapımalı ! Duruma göre Scoped, Transient olarak değiştirilebilir.
             services.AddSingleton(sp =>
             {
@@ -85,6 +87,9 @@ namespace ApiGateway
 
                 return new Service.ProductService.ProductServiceClient(channel);
             });
+
+
+            // Option - 2 ObjectPool pattern dene !
         }
     }
 }
