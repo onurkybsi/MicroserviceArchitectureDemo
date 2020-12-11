@@ -1,4 +1,4 @@
-namespace Infrastructure.Models
+namespace Infrastructure.Model
 {
     public class ProcessResult
     {

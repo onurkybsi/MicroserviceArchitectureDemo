@@ -1,4 +1,5 @@
-using Infrastructure.Models;
+
+using Infrastructure.Model;
 
 namespace Infrastructure.Framework.Grpc
 {

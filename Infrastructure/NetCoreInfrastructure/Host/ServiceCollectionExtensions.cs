@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using Grpc.Core;
 using Infrastructure.Framework.Grpc;
-using Infrastructure.Models;
+using Infrastructure.Model;
 using Infrastructure.Utility;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
