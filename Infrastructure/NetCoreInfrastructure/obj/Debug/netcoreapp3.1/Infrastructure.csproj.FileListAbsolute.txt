@@ -1,9 +1,12 @@
 C:\Users\onurb\Source\Repos\MicroserviceArchitectureDemo\Infrastructure\NetCoreInfrastructure\bin\Debug\netcoreapp3.1\Infrastructure.deps.json
 C:\Users\onurb\Source\Repos\MicroserviceArchitectureDemo\Infrastructure\NetCoreInfrastructure\bin\Debug\netcoreapp3.1\Infrastructure.dll
 C:\Users\onurb\Source\Repos\MicroserviceArchitectureDemo\Infrastructure\NetCoreInfrastructure\bin\Debug\netcoreapp3.1\Infrastructure.pdb
+C:\Users\onurb\Source\Repos\MicroserviceArchitectureDemo\Infrastructure\NetCoreInfrastructure\bin\Debug\netcoreapp3.1\Base.dll
+C:\Users\onurb\Source\Repos\MicroserviceArchitectureDemo\Infrastructure\NetCoreInfrastructure\bin\Debug\netcoreapp3.1\Base.pdb
+C:\Users\onurb\Source\Repos\MicroserviceArchitectureDemo\Infrastructure\NetCoreInfrastructure\obj\Debug\netcoreapp3.1\Infrastructure.csprojAssemblyReference.cache
 C:\Users\onurb\Source\Repos\MicroserviceArchitectureDemo\Infrastructure\NetCoreInfrastructure\obj\Debug\netcoreapp3.1\Infrastructure.csproj.CoreCompileInputs.cache
 C:\Users\onurb\Source\Repos\MicroserviceArchitectureDemo\Infrastructure\NetCoreInfrastructure\obj\Debug\netcoreapp3.1\Infrastructure.AssemblyInfoInputs.cache
 C:\Users\onurb\Source\Repos\MicroserviceArchitectureDemo\Infrastructure\NetCoreInfrastructure\obj\Debug\netcoreapp3.1\Infrastructure.AssemblyInfo.cs
+C:\Users\onurb\Source\Repos\MicroserviceArchitectureDemo\Infrastructure\NetCoreInfrastructure\obj\Debug\netcoreapp3.1\Infrastructure.csproj.CopyComplete
 C:\Users\onurb\Source\Repos\MicroserviceArchitectureDemo\Infrastructure\NetCoreInfrastructure\obj\Debug\netcoreapp3.1\Infrastructure.dll
 C:\Users\onurb\Source\Repos\MicroserviceArchitectureDemo\Infrastructure\NetCoreInfrastructure\obj\Debug\netcoreapp3.1\Infrastructure.pdb
-C:\Users\onurb\Source\Repos\MicroserviceArchitectureDemo\Infrastructure\NetCoreInfrastructure\obj\Debug\netcoreapp3.1\Infrastructure.csprojAssemblyReference.cache

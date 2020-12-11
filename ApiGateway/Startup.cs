@@ -81,9 +81,10 @@ namespace ApiGateway
         }
         private void RegisterGrpcClients(IServiceCollection services)
         {
-            // Tüm optionlar yük testi yapılıp denenmeli !
+            // TO-DO: Tüm optionlar yük testi yapılıp denenmeli !
 
-            // Option - 1 burda ki lifetime cycle ı değiştirip deneyelim
+            // Option - 1 
+            // TO-DO: Burda ki lifetime cycle ı değiştirip deneyelim
             // services.AddSingleton(sp =>
             // {
             //     // TO-DO: ChannelCredentials ayarlanmalı

@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v3.1": {
       "Infrastructure/1.0.0": {
         "dependencies": {
+          "Base": "1.0.0",
           "Grpc.Core": "2.34.0",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "3.1.6",
           "Microsoft.EntityFrameworkCore": "3.1.10",
@@ -16,6 +17,23 @@
         },
         "runtime": {
           "Infrastructure.dll": {}
+        }
+      },
+      "Google.Protobuf/3.14.0": {
+        "dependencies": {
+          "System.Memory": "4.5.3",
+          "System.Runtime.CompilerServices.Unsafe": "4.5.2"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Protobuf.dll": {
+            "assemblyVersion": "3.14.0.0",
+            "fileVersion": "3.14.0.0"
+          }
+        }
+      },
+      "Grpc/2.33.1": {
+        "dependencies": {
+          "Grpc.Core": "2.34.0"
         }
       },
       "Grpc.Core/2.34.0": {
@@ -627,6 +645,7 @@
           "Microsoft.NETCore.Targets": "1.1.0"
         }
       },
+      "System.Runtime.CompilerServices.Unsafe/4.5.2": {},
       "System.Runtime.Extensions/4.3.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.1.0",
@@ -763,6 +782,15 @@
           "System.Threading": "4.3.0",
           "System.Xml.ReaderWriter": "4.3.0"
         }
+      },
+      "Base/1.0.0": {
+        "dependencies": {
+          "Google.Protobuf": "3.14.0",
+          "Grpc": "2.33.1"
+        },
+        "runtime": {
+          "Base.dll": {}
+        }
       }
     }
   },
@@ -771,6 +799,20 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "Google.Protobuf/3.14.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-9AkodyGNmLI+wJJPbwpWLmh4BMHoXDQ9+8qvDPhQQi/BNsleqKMBn3OlyLwC6CALwan2kc5+Cenb8fJSITX3nQ==",
+      "path": "google.protobuf/3.14.0",
+      "hashPath": "google.protobuf.3.14.0.nupkg.sha512"
+    },
+    "Grpc/2.33.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-zQKP4GQ59tmUP9fIgUHAON6MwB1WHNILsINtr+4lF9zRVmBV0y2t1Jj0gmVKGK9wteBc+wqh9X75HjHF1AztUw==",
+      "path": "grpc/2.33.1",
+      "hashPath": "grpc.2.33.1.nupkg.sha512"
     },
     "Grpc.Core/2.34.0": {
       "type": "package",
@@ -1185,6 +1227,13 @@
       "path": "system.runtime/4.3.0",
       "hashPath": "system.runtime.4.3.0.nupkg.sha512"
     },
+    "System.Runtime.CompilerServices.Unsafe/4.5.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-wprSFgext8cwqymChhrBLu62LMg/1u92bU+VOwyfBimSPVFXtsNqEWC92Pf9ofzJFlk4IHmJA75EDJn1b2goAQ==",
+      "path": "system.runtime.compilerservices.unsafe/4.5.2",
+      "hashPath": "system.runtime.compilerservices.unsafe.4.5.2.nupkg.sha512"
+    },
     "System.Runtime.Extensions/4.3.0": {
       "type": "package",
       "serviceable": true,
@@ -1296,6 +1345,11 @@
       "sha512": "sha512-lJ8AxvkX7GQxpC6GFCeBj8ThYVyQczx2+f/cWHJU8tjS7YfI6Cv6bon70jVEgs2CiFbmmM8b9j1oZVx0dSI2Ww==",
       "path": "system.xml.xmldocument/4.3.0",
       "hashPath": "system.xml.xmldocument.4.3.0.nupkg.sha512"
+    },
+    "Base/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }
