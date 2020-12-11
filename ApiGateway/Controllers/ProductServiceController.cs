@@ -1,10 +1,10 @@
 using System;
 using System.Threading.Tasks;
-using Infrastructure.Grpc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ApiGateway.Services.Controller;
+using Infrastructure.Framework.Grpc;
 
 namespace ApiGateway.Controllers.ProductService
 {

@@ -1,4 +1,4 @@
-using Infrastructure.Grpc;
+using Infrastructure.Framework.Grpc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

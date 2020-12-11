@@ -1,4 +1,4 @@
-using Infrastructure;
+using Infrastructure.Model;
 
 namespace ApiGateway.Model
 {

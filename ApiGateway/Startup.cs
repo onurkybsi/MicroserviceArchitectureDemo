@@ -1,15 +1,13 @@
-using System.Collections.Generic;
 using System.Text;
 using ApiGateway.Model;
-using Grpc.Core;
-using Infrastructure;
-using Infrastructure.Grpc;
+using Infrastructure.Framework.Grpc;
+using Infrastructure.Host;
+using Infrastructure.Model;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.ObjectPool;
 using Serilog;
 
 namespace ApiGateway
@@ -29,16 +27,7 @@ namespace ApiGateway
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.ConfigureManuelly<AuthConfig>(Configuration, ac => ac.SecurityKey = Encoding.ASCII.GetBytes(Configuration["AuthConfig:SecurityKey"]));
-
-            services.AddSingleton<IAuthConfig>(sp => sp.GetRequiredService<AuthConfig>());
-
-            services.AddJwtAuth(new AuthConfig
-            {
-                SecurityKey = Encoding.ASCII.GetBytes(Configuration["AuthConfig:SecurityKey"]),
-                Audience = Configuration["AuthConfig:Audience"],
-                Issuer = Configuration["AuthConfig:Issuer"]
-            });
+            ConfigureAuth(services);
 
             RegisterModules(services);
 
@@ -50,8 +39,6 @@ namespace ApiGateway
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            Log.Information($"ApiGateway listening on: {env.EnvironmentName}");
-
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
             else if (env.IsProduction())
@@ -70,18 +57,33 @@ namespace ApiGateway
             {
                 endpoints.MapControllers();
             });
+
+            Log.Information($"ApiGateway listening on: {env.EnvironmentName}");
         }
 
+        private void ConfigureAuth(IServiceCollection services)
+        {
+            services.ConfigureManuelly<AuthConfig>(Configuration, ac => ac.SecurityKey = Encoding.ASCII.GetBytes(Configuration["AuthConfig:SecurityKey"]));
+
+            services.AddSingleton<IAuthConfig>(sp => sp.GetRequiredService<AuthConfig>());
+
+            services.AddJwtAuth(new AuthConfig
+            {
+                SecurityKey = Encoding.ASCII.GetBytes(Configuration["AuthConfig:SecurityKey"]),
+                Audience = Configuration["AuthConfig:Audience"],
+                Issuer = Configuration["AuthConfig:Issuer"]
+            });
+        }
         private static void RegisterModules(IServiceCollection services)
         {
             services.RegisterModule(Data.Descriptor.GetDescriptor());
             services.RegisterModule(Services.Descriptor.GetDescriptor());
         }
-
         private void RegisterGrpcClients(IServiceCollection services)
         {
-            // Option - 1
-            // TO-DO: Yük testi yapımalı ! Duruma göre Scoped, Transient olarak değiştirilebilir.
+            // Tüm optionlar yük testi yapılıp denenmeli !
+
+            // Option - 1 burda ki lifetime cycle ı değiştirip deneyelim
             // services.AddSingleton(sp =>
             // {
             //     // TO-DO: ChannelCredentials ayarlanmalı
@@ -90,8 +92,10 @@ namespace ApiGateway
             //     return new Service.ProductService.ProductServiceClient(channel);
             // });
 
+            // Option - 2 ObjectPool pattern using custom pool
+            // services.AddGrpcClientCustomPool<Service.ProductService.ProductServiceClient>(new GrpcClientPoolConfig { TargetServerURL = Configuration["PRODUCT_SERVICE_URL"] });
 
-            // Option - 2 ObjectPool pattern
+            // Option - 3 ObjectPool pattern using .NET Core pool
             services.AddGrpcClientPool<Service.ProductService.ProductServiceClient>(new GrpcClientPoolConfig { TargetServerURL = Configuration["PRODUCT_SERVICE_URL"] });
         }
     }

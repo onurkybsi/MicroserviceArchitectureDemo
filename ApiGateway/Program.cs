@@ -4,7 +4,7 @@ using System.IO;
 using ApiGateway.Data;
 using ApiGateway.Data.AppUser;
 using ApiGateway.Services.Auth;
-using Infrastructure;
+using Infrastructure.Utility;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;

@@ -3,7 +3,7 @@ using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using ApiGateway.Data.AppUser;
-using Infrastructure;
+using Infrastructure.Model;
 
 namespace ApiGateway.Services.Auth
 {
