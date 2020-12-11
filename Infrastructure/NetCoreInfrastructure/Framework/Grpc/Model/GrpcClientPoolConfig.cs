@@ -1,7 +1,7 @@
 using System;
 using Grpc.Core;
 
-namespace Infrastructure.Grpc
+namespace Infrastructure.Framework.Grpc
 {
     public class GrpcClientPoolConfig
     {

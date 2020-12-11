@@ -1,6 +1,6 @@
 using Infrastructure.Models;
 
-namespace Infrastructure.Grpc
+namespace Infrastructure.Framework.Grpc
 {
     public class ServiceCallResult<TResponse> : ProcessResult
     {

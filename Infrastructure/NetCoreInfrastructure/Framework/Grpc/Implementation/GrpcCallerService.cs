@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Google.Protobuf;
 using Grpc.Core;
 
-namespace Infrastructure.Grpc
+namespace Infrastructure.Framework.Grpc
 {
     public static class GrpcCallerService
     {

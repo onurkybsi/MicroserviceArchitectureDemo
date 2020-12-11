@@ -2,9 +2,9 @@ using System;
 using System.Collections.Concurrent;
 using Grpc.Core;
 
-namespace Infrastructure.Grpc
+namespace Infrastructure.Framework.Grpc
 {
-    public class GrpcClientPool<TClient>
+    public class GrpcClientPool<TClient> : IGrpcClientPool<TClient>
     {
         private readonly ConcurrentBag<TClient> _clients;
         private readonly Channel _channel;

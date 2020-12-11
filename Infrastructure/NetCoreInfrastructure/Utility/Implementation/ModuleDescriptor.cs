@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Infrastructure
+namespace Infrastructure.Utility
 {
     // ModuleDescriptor ler IDisposable olabilir tanımlar register olduktan sonra bu instance'larını yaşamasına gerek yok.
     public abstract class ModuleDescriptor<T> : IModuleDescriptor

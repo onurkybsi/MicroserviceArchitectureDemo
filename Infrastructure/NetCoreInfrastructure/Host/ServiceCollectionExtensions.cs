@@ -1,13 +1,17 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using Grpc.Core;
-using Infrastructure.Grpc;
+using Infrastructure.Framework.Grpc;
+using Infrastructure.Models;
+using Infrastructure.Utility;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.ObjectPool;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Infrastructure
+namespace Infrastructure.Host
 {
     public static class ServiceCollectionExtensions
     {
@@ -59,7 +63,7 @@ namespace Infrastructure
             return services;
         }
 
-        public static IServiceCollection AddGrpcClientPool<TClient>(this IServiceCollection services, GrpcClientPoolConfig clientConfig)
+        public static IServiceCollection AddGrpcClientCustomPool<TClient>(this IServiceCollection services, GrpcClientPoolConfig clientConfig)
             where TClient : ClientBase
         {
             services.AddSingleton(p =>
@@ -73,6 +77,28 @@ namespace Infrastructure
 
                 return pool.Get();
             }, ServiceLifetime.Transient));
+
+            return services;
+        }
+
+        public static IServiceCollection AddGrpcClientPool<TClient>(this IServiceCollection services, GrpcClientPoolConfig clientConfig)
+            where TClient : ClientBase
+        {
+            if (!services.Any(x => x.ServiceType == typeof(ObjectPoolProvider)))
+                services.TryAddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
+
+            services.TryAddSingleton<ObjectPool<TClient>>(serviceProvider =>
+            {
+                var provider = serviceProvider.GetRequiredService<ObjectPoolProvider>();
+
+                var channel = new Channel(clientConfig.TargetServerURL, ChannelCredentials.Insecure);
+
+                var policy = new GrpcClientPooledObjectPolicy<TClient>(channel);
+
+                return provider.Create(policy);
+            });
+
+            services.AddTransient<TClient>(sp => sp.GetRequiredService<ObjectPool<TClient>>().Get());
 
             return services;
         }

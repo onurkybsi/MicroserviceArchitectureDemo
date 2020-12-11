@@ -1,4 +1,4 @@
-namespace Infrastructure
+namespace Infrastructure.Models
 {
     public interface IAuthConfig
     {
