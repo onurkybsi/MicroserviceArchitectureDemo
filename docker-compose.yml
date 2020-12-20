@@ -1,5 +1,18 @@
 version: "3.4"
 services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:latest
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      discovery.type: "single-node"
+  kibana:
+    image: docker.elastic.co/kibana/kibana:latest
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
   app-user-db:
     image: "mcr.microsoft.com/mssql/server:2017-latest"
     environment:
@@ -7,12 +20,6 @@ services:
       - SA_PASSWORD=1Secure*Password1
     ports:
       - "1433:1433"
-  seq-log:
-    image: datalust/seq:latest
-    environment:
-      - ACCEPT_EULA=Y
-    ports:
-      - "5341:5341"
   apigateway:
     build: ./ApiGateway
     ports:
@@ -21,4 +28,4 @@ services:
       - ./ApiGateway/dev-docker.env
     depends_on:
       - app-user-db
-      - seq-log
+      - kibana

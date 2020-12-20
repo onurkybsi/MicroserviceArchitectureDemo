@@ -10,9 +10,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
-using Serilog.Events;
-using Serilog.Formatting.Elasticsearch;
-using Serilog.Sinks.Elasticsearch;
 
 namespace ApiGateway
 {
@@ -22,17 +19,21 @@ namespace ApiGateway
         {
             var configuration = InitialHelper.GetConfiguration(Directory.GetCurrentDirectory(), Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
 
-            Log.Logger = CreateSerilogLogger(configuration);
+            Log.Logger = InitialHelper.CreateELKLogger(new Infrastructre.Model.ELKLoggerConfig
+            {
+                AppName = configuration["ASPNETCORE_APPLICATIONNAME"],
+                ElasticsearchURL = configuration["ELASTICSEARCH_URL"]
+            });
 
             var host = CreateHostBuilder(args, configuration).Build();
 
-            SeedAppUserDb(host, GetAdminUser(configuration));
+            SeedAppUserDb(GetAdminUser(configuration));
 
             host.Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args, IConfiguration configuration) =>
-            Host.CreateDefaultBuilder(args)
+        public static IHostBuilder CreateHostBuilder(string[] args, IConfiguration configuration)
+            => Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration(x => x.AddConfiguration(configuration))
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
@@ -40,28 +41,7 @@ namespace ApiGateway
                     webBuilder.UseStartup<Startup>();
                 }).ConfigureLogging(config => config.ClearProviders()).UseSerilog();
 
-        private static Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
-        {
-            return new LoggerConfiguration()
-                .Enrich.FromLogContext()
-                .Enrich.WithProperty("Application", "ApiGateway")
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-                .MinimumLevel.Override("System", LogEventLevel.Warning)
-                .WriteTo.Console()
-                .WriteTo.Elasticsearch(
-                    new ElasticsearchSinkOptions(
-                        new Uri("http://localhost:9200/"))
-                    {
-                        CustomFormatter = new ExceptionAsObjectJsonFormatter(renderMessage: true),
-                        AutoRegisterTemplate = true,
-                        TemplateName = "serilog-events-template",
-                        IndexFormat = "apigateway-log-{0:yyyy.MM.dd}"
-                    })
-                .MinimumLevel.Verbose()
-                .CreateLogger();
-        }
-
-        private static void SeedAppUserDb(IHost host, AppUser admin)
+        private static void SeedAppUserDb(AppUser admin)
         {
             try
             {
@@ -71,7 +51,6 @@ namespace ApiGateway
             {
                 Log.Error(ex, "An error occurred seeding the AppUserDb.");
             }
-
         }
 
         private static AppUser GetAdminUser(IConfiguration configuration)

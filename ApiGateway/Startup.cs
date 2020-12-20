@@ -58,7 +58,7 @@ namespace ApiGateway
                 endpoints.MapControllers();
             });
 
-            Log.Information($"ApiGateway listening on: {env.EnvironmentName}");
+            Log.ForContext<Startup>().Information("{Application} is listening on {Env}...", env.ApplicationName, env.EnvironmentName);
         }
 
         private void ConfigureAuth(IServiceCollection services)
