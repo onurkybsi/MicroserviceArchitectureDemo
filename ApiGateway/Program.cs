@@ -10,6 +10,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Serilog.Events;
+using Serilog.Formatting.Elasticsearch;
+using Serilog.Sinks.Elasticsearch;
 
 namespace ApiGateway
 {
@@ -38,9 +41,25 @@ namespace ApiGateway
                 }).ConfigureLogging(config => config.ClearProviders()).UseSerilog();
 
         private static Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
-            => new LoggerConfiguration()
-                .ReadFrom.Configuration(configuration)
+        {
+            return new LoggerConfiguration()
+                .Enrich.FromLogContext()
+                .Enrich.WithProperty("Application", "ApiGateway")
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                .MinimumLevel.Override("System", LogEventLevel.Warning)
+                .WriteTo.Console()
+                .WriteTo.Elasticsearch(
+                    new ElasticsearchSinkOptions(
+                        new Uri("http://localhost:9200/"))
+                    {
+                        CustomFormatter = new ExceptionAsObjectJsonFormatter(renderMessage: true),
+                        AutoRegisterTemplate = true,
+                        TemplateName = "serilog-events-template",
+                        IndexFormat = "apigateway-log-{0:yyyy.MM.dd}"
+                    })
+                .MinimumLevel.Verbose()
                 .CreateLogger();
+        }
 
         private static void SeedAppUserDb(IHost host, AppUser admin)
         {
