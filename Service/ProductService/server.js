@@ -1,7 +1,4 @@
 //#region Imports
-const bunyan = require("bunyan");
-const seq = require("bunyan-seq");
-
 const grpc = require("grpc");
 const protoLoader = require("@grpc/proto-loader");
 
@@ -13,6 +10,7 @@ require("dotenv").config({
 });
 
 const productService = require("./service/productService");
+const Logger = require("./service/logger").Logger;
 //#endregion
 
 const packageDefinition = protoLoader.loadSync(
@@ -25,20 +23,6 @@ const packageDefinition = protoLoader.loadSync(
     oneofs: true,
   }
 );
-
-const logger = bunyan.createLogger({
-  name: "server",
-  streams: [
-    {
-      stream: process.stdout,
-      level: "warn",
-    },
-    seq.createStream({
-      serverUrl: "http://192.168.99.105:5341",
-      level: "info",
-    }),
-  ],
-});
 
 const connectToMongo = async (dbUrl) => {
   await mongoose.connect(dbUrl, {
@@ -56,7 +40,7 @@ const registerServices = (server) => {
 };
 
 async function main() {
-  logger.info(`ProductService running on: ${process.env.ENVIRONMENT}`);
+  Logger.info(`ProductService running on: ${process.env.ENVIRONMENT}`, {});
 
   await connectToMongo(process.env.PRODUCTDB_CONNECTION_STRING);
 

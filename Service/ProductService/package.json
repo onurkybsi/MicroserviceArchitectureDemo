@@ -11,11 +11,11 @@
   "license": "ISC",
   "dependencies": {
     "@grpc/proto-loader": "^0.5.5",
-    "bunyan": "^1.8.14",
-    "bunyan-seq": "^0.4.0",
     "dotenv": "^8.2.0",
     "grpc": "^1.24.4",
-    "mongoose": "^5.10.17"
+    "mongoose": "^5.10.17",
+    "winston": "^3.3.3",
+    "winston-elasticsearch": "^0.12.3"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
