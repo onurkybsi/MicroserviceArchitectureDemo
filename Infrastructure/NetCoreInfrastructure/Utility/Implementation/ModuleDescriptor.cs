@@ -4,13 +4,21 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure.Utility
 {
-    // ModuleDescriptor ler IDisposable olabilir tanımlar register olduktan sonra bu instance'larını yaşamasına gerek yok.
+    /// <summary>
+    /// Generic abstract IModuleDescriptor base implementation
+    /// </summary>
     public abstract class ModuleDescriptor<T> : IModuleDescriptor
     {
         protected static T instance;
 
         protected ModuleDescriptor() { }
 
+        /// <summary>
+        /// Creates the described module descriptor and returns.
+        /// </summary>
+        /// <returns>
+        /// Returns the described module descriptor
+        /// </returns>
         public static T GetDescriptor()
             => instance ?? (instance = (T)Activator.CreateInstance(typeof(T)));
 

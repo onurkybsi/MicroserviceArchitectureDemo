@@ -74,7 +74,7 @@ namespace Infrastructure.Utility
                         CustomFormatter = new ExceptionAsObjectJsonFormatter(renderMessage: true),
                         AutoRegisterTemplate = true,
                         TemplateName = "serilog-events-template",
-                        IndexFormat = string.Format("{0}-log-{0:yyyy.MM.dd}", config.AppName.ToLower())
+                        IndexFormat = string.Format("{0}-logs", config.AppName.ToLower())
                     })
                 .MinimumLevel.Verbose()
                 .CreateLogger();
