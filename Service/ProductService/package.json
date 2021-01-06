@@ -13,6 +13,7 @@
     "@grpc/proto-loader": "^0.5.5",
     "dotenv": "^8.2.0",
     "grpc": "^1.24.4",
+    "models-validator": "^1.0.3",
     "mongoose": "^5.10.17",
     "winston": "^3.3.3",
     "winston-elasticsearch": "^0.12.3"

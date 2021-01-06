@@ -10,8 +10,13 @@ require("dotenv").config({
 });
 
 const productService = require("./service/productService");
-const Logger = require("./service/logger").Logger;
+const LogService = require("./service/logService");
 //#endregion
+
+const Logger = LogService.CreateLogger({
+  elasticUrl: process.env.ELASTICSEARCH_URL,
+  appName: process.env.APP_NAME,
+});
 
 const packageDefinition = protoLoader.loadSync(
   `${__dirname}/${process.env.PROTO_FILE_PATH}`,
