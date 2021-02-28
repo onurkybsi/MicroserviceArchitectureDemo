@@ -1,5 +1,4 @@
-
-using Infrastructure.Model;
+using KybInfrastructure.Model;
 
 namespace Infrastructure.Framework.Grpc
 {

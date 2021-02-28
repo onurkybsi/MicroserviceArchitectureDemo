@@ -27,10 +27,10 @@ namespace ApiGateway.Controllers.ProductService
         {
             var response = await GrpcCallerService.CallService<Service.GetByIdResponse>(async () => await _client.GetByIdAsync(request, deadline: DateTime.UtcNow.AddSeconds(30)));
 
-            if (!response.IsSuccess)
+            if (!response.IsSuccessful)
                 _logger.LogError($"{nameof(ProductServiceController)} call unsuccessful on GetProductById: {response.Message}");
 
-            return ResponseHelper.PrepareServiceCallResponse(this, response.ServiceResponse.ServiceProcessResult.IsSuccess, response);
+            return ResponseHelper.PrepareServiceCallResponse(this, response.ServiceResponse.ServiceProcessResult.IsSuccessful, response);
         }
 
         [HttpGet]
@@ -39,10 +39,10 @@ namespace ApiGateway.Controllers.ProductService
             var response = await GrpcCallerService.CallService<Service.GetListByQueryResponse>(async ()
                 => await _client.GetListByQueryAsync(request, deadline: DateTime.UtcNow.AddSeconds(30)));
 
-            if (!response.IsSuccess)
+            if (!response.IsSuccessful)
                 _logger.LogError($"{nameof(ProductServiceController)} call unsuccessful on GetListByQuery: {response.Message}");
 
-            return ResponseHelper.PrepareServiceCallResponse(this, response.ServiceResponse.ServiceProcessResult.IsSuccess, response);
+            return ResponseHelper.PrepareServiceCallResponse(this, response.ServiceResponse.ServiceProcessResult.IsSuccessful, response);
         }
 
         [HttpPost]
@@ -50,11 +50,11 @@ namespace ApiGateway.Controllers.ProductService
         {
             var response = await GrpcCallerService.CallService<Service.SaveResponse>(async () => await _client.SaveAsync(request, deadline: DateTime.UtcNow.AddSeconds(30)));
 
-            if (!response.IsSuccess)
+            if (!response.IsSuccessful)
                 _logger.LogError($"{nameof(ProductServiceController)} call unsuccessful on Save: {response.Message}");
 
 
-            return ResponseHelper.PrepareServiceCallResponse(this, response.ServiceResponse.ServiceProcessResult.IsSuccess, response);
+            return ResponseHelper.PrepareServiceCallResponse(this, response.ServiceResponse.ServiceProcessResult.IsSuccessful, response);
         }
 
         [HttpDelete]
@@ -62,11 +62,11 @@ namespace ApiGateway.Controllers.ProductService
         {
             var response = await GrpcCallerService.CallService<Service.DeleteByIdResponse>(async () => await _client.DeleteAsync(request, deadline: DateTime.UtcNow.AddSeconds(30)));
 
-            if (!response.IsSuccess)
+            if (!response.IsSuccessful)
                 _logger.LogError($"{nameof(ProductServiceController)} call unsuccessful on Save: {response.Message}");
 
 
-            return ResponseHelper.PrepareServiceCallResponse(this, response.ServiceResponse.ServiceProcessResult.IsSuccess, response);
+            return ResponseHelper.PrepareServiceCallResponse(this, response.ServiceResponse.ServiceProcessResult.IsSuccessful, response);
         }
     }
 }

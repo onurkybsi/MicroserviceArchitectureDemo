@@ -3,6 +3,6 @@ syntax = "proto3";
 package service;
 
 message ServiceProcessResult {
-	bool isSuccess = 1;
+	bool isSuccessful = 1;
 	string message = 2;
 }

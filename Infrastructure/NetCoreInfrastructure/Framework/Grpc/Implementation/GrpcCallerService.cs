@@ -19,7 +19,7 @@ namespace Infrastructure.Framework.Grpc
                 // Burda responseFromService TResponse oldugu için servisten dönen isSuccess i handle etmek mümkün değil.
                 // Bu konuda bi düşünelim ServiceCallResult objesi değişmeli mi bilemiyorum ?
                 // Burda servisi çağırırken oluşucak hata ile servis içi hata ayrıştırılmalı  hata kodları yazılmalı !;
-                serviceCallResult.IsSuccess = true;
+                serviceCallResult.IsSuccessful = true;
                 serviceCallResult.ServiceResponse = responseFromService;
 
                 return serviceCallResult;

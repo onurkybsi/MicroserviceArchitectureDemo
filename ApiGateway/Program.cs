@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using ApiGateway.Data;
-using ApiGateway.Data.AppUser;
-using ApiGateway.Services.Auth;
-using Infrastructure.Utility;
+using KybInfrastructure.Host;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -17,17 +12,15 @@ namespace ApiGateway
     {
         public static void Main(string[] args)
         {
-            var configuration = InitialHelper.GetConfiguration(Directory.GetCurrentDirectory(), Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
+            var configuration = InitialHelper.GetConfiguration(Directory.GetCurrentDirectory(), System.Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
 
-            Log.Logger = InitialHelper.CreateELKLogger(new Infrastructre.Model.ELKLoggerConfig
+            Log.Logger = InitialHelper.CreateELKLogger(new ELKLoggerSettings
             {
                 AppName = configuration["ASPNETCORE_APPLICATIONNAME"],
                 ElasticsearchURL = configuration["ELASTICSEARCH_URL"]
             });
 
             var host = CreateHostBuilder(args, configuration).Build();
-
-            SeedAppUserDb(GetAdminUser(configuration));
 
             host.Run();
         }
@@ -40,24 +33,5 @@ namespace ApiGateway
                     webBuilder.UseKestrel();
                     webBuilder.UseStartup<Startup>();
                 }).ConfigureLogging(config => config.ClearProviders()).UseSerilog();
-
-        private static void SeedAppUserDb(AppUser admin)
-        {
-            try
-            {
-                InitialHelper.SeedData<ApiGatewayDbContext, AppUser>(new List<AppUser> { admin });
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "An error occurred seeding the AppUserDb.");
-            }
-        }
-
-        private static AppUser GetAdminUser(IConfiguration configuration)
-            => new AppUser
-            {
-                Email = configuration["APP_ADMIN_USER"],
-                HashedPassword = EncryptionHelper.CreateHashed(configuration["APP_ADMIN_PASSWORD"])
-            };
     }
 }

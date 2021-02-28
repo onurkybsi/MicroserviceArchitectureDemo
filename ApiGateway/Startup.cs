@@ -1,8 +1,5 @@
-using System.Text;
-using ApiGateway.Model;
-using Infrastructure.Framework.Grpc;
-using Infrastructure.Host;
-using Infrastructure.Model;
+using KybInfrastructure.Framework.Grpc;
+using KybInfrastructure.Host;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -27,10 +24,6 @@ namespace ApiGateway
 
         public void ConfigureServices(IServiceCollection services)
         {
-            ConfigureAuth(services);
-
-            RegisterModules(services);
-
             RegisterGrpcClients(services);
 
             services.AddControllers()
@@ -43,6 +36,8 @@ namespace ApiGateway
                 app.UseDeveloperExceptionPage();
             else if (env.IsProduction())
                 app.UseHttpsRedirection();
+
+            app.UseSerilogRequestLogging();
 
             app.UseRouting();
             app.UseCors(c => c
@@ -61,24 +56,6 @@ namespace ApiGateway
             Log.ForContext<Startup>().Information("{Application} is listening on {Env}...", env.ApplicationName, env.EnvironmentName);
         }
 
-        private void ConfigureAuth(IServiceCollection services)
-        {
-            services.ConfigureManuelly<AuthConfig>(Configuration, ac => ac.SecurityKey = Encoding.ASCII.GetBytes(Configuration["AuthConfig:SecurityKey"]));
-
-            services.AddSingleton<IAuthConfig>(sp => sp.GetRequiredService<AuthConfig>());
-
-            services.AddJwtAuth(new AuthConfig
-            {
-                SecurityKey = Encoding.ASCII.GetBytes(Configuration["AuthConfig:SecurityKey"]),
-                Audience = Configuration["AuthConfig:Audience"],
-                Issuer = Configuration["AuthConfig:Issuer"]
-            });
-        }
-        private static void RegisterModules(IServiceCollection services)
-        {
-            services.RegisterModule(Data.Descriptor.GetDescriptor());
-            services.RegisterModule(Services.Descriptor.GetDescriptor());
-        }
         private void RegisterGrpcClients(IServiceCollection services)
         {
             // TO-DO: Tüm optionlar yük testi yapılıp denenmeli !
@@ -100,7 +77,7 @@ namespace ApiGateway
 
             // Option - 3 ObjectPool pattern using .NET Core pool
             // Test - 10: 31 / Test - 100: 30.5 / Test - 1000: 29ms
-            services.AddGrpcClientPool<Service.ProductService.ProductServiceClient>(new GrpcClientPoolConfig { TargetServerURL = Configuration["PRODUCT_SERVICE_URL"] });
+            services.AddGrpcClientPool<Service.ProductService.ProductServiceClient>(new GrpcClientPoolSettings { TargetServerURL = Configuration["PRODUCT_SERVICE_URL"] });
         }
     }
 }
