@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+import "base.proto";
+
+package service;
+
+service UserService {
+	rpc VerifyUser(VerifyUserRequest) returns (VerifyUserResponse);
+	rpc AuthenticateUser(AuthenticateUserRequest) returns (AuthenticateUserResponse);
+}
+
+message VerifyUserRequest {
+	string token = 1;
+}
+
+message VerifyUserResponse {
+	ServiceProcessResult serviceProcessResult = 1;
+	AuthenticationResult authenticationResult = 2;
+}
+
+message AuthenticateUserRequest {
+	string email = 1;
+	string password = 1;
+}
+
+message AuthenticateUserResponse {
+	ServiceProcessResult serviceProcessResult = 1;
+	AuthenticationResult authenticationResult = 2;
+}
+
+message AuthenticationResult {
+	bool	isAuthenticated = 1;
+	string message = 2;
+}
