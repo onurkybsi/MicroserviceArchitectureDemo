@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"os"
 	"userService/model"
 	"userService/service"
 
@@ -14,10 +13,12 @@ import (
 func main() {
 	fmt.Println("Hello from UserService !")
 
-	currentPath, _ := os.Getwd()
-	service.LoadConfigurationValues(model.ConfigurationValuesLoadContext{CofigurationFilesPath: currentPath, Environment: model.DEV})
+	envFilePath := fmt.Sprintf(`.\%v.env`, model.DEV)
+	appsettingsFilePath := fmt.Sprintf(`.\%v`, "appsettings.json")
+	confValueGetter := service.LoadConfigurationValues(model.ConfigurationValuesLoadContext{EnvFilePath: envFilePath, AppSettingsFilePath: appsettingsFilePath})
 
-	tcpPort := os.Getenv("SERVER_PORT")
+	tcpPort := confValueGetter("SERVER_PORT")
+
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%v", tcpPort))
 	if err != nil {
 		log.Fatalf("Failed to listen on port 9000: %v", err)
