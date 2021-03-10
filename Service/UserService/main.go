@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"log"
 	"net"
+	service "userService/grpc-base"
 	"userService/model"
-	"userService/service"
+	"userService/utility"
 
 	"google.golang.org/grpc"
 )
@@ -15,7 +16,7 @@ func main() {
 
 	envFilePath := fmt.Sprintf(`.\%v.env`, model.DEV)
 	appsettingsFilePath := fmt.Sprintf(`.\%v`, "appsettings.json")
-	confValueGetter := service.LoadConfigurationValues(model.ConfigurationValuesLoadContext{EnvFilePath: envFilePath, AppSettingsFilePath: appsettingsFilePath})
+	confValueGetter := utility.LoadConfigurationValues(model.ConfigurationValuesLoadContext{EnvFilePath: envFilePath, AppSettingsFilePath: appsettingsFilePath})
 
 	tcpPort := confValueGetter("SERVER_PORT")
 
@@ -26,7 +27,11 @@ func main() {
 		log.Printf("Listen on port %v\n", tcpPort)
 	}
 
+	userServiceServer := UserService{}
 	grpcServer := grpc.NewServer()
+
+	service.RegisterUserServiceServer(grpcServer, &userServiceServer)
+
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("Failed to serve gRPC server over port 9000: %v", err)
 	} else {
